@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 class GUI extends JFrame {
-    private Grid grid;
+    private TerrainGrid terrainGrid;
     private JSlider slider;
     private JPanel panel2;
     private static final Dimension frameSize = new Dimension(700,600);
@@ -32,19 +32,19 @@ class GUI extends JFrame {
 
     private void initUI() {
         setLayout(new BorderLayout());
-        grid = new Grid();
+        terrainGrid = new TerrainGrid();
         panel2 = new JPanel();
         panel2.setLayout(new FlowLayout(FlowLayout.CENTER));
-        panel2.add(grid);
+        panel2.add(terrainGrid);
         JScrollPane mainPanel = new JScrollPane(panel2);
         add(mainPanel);
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        xCountChoice = new JComboBox<>(Grid.Sizes);
+        xCountChoice = new JComboBox<>(TerrainGrid.Sizes);
         xCountChoice.setFocusable(false);
         xCountChoice.setActionCommand("setXCount");
         xCountChoice.addActionListener(this::actionPerformed);
-        yCountChoice = new JComboBox<>(Grid.Sizes);
+        yCountChoice = new JComboBox<>(TerrainGrid.Sizes);
         yCountChoice.setFocusable(false);
         yCountChoice.setActionCommand("setYCount");
         yCountChoice.addActionListener(this::actionPerformed);
@@ -79,19 +79,19 @@ class GUI extends JFrame {
     private void zoomChosen(ChangeEvent e) {
         int reqSize = slider.getValue();
         System.out.println(String.format("Setting zoom to %d", reqSize));
-        grid.setCellSize(reqSize);
-        grid.repaint();
-        grid.revalidate();
+        terrainGrid.setCellSize(reqSize);
+        terrainGrid.repaint();
+        terrainGrid.revalidate();
         panel2.setPreferredSize(
                 new Dimension(
-                        (int)grid.getPreferredSize().getWidth()+5,
-                        (int)grid.getPreferredSize().getHeight()+5
+                        (int) terrainGrid.getPreferredSize().getWidth()+5,
+                        (int) terrainGrid.getPreferredSize().getHeight()+5
                 )
         );
     }
 
     private void timerHandler(ActionEvent e) {
-        grid.iteration();
+        terrainGrid.iteration();
     }
 
     private void actionPerformed(ActionEvent e) {
@@ -103,7 +103,7 @@ class GUI extends JFrame {
                 slider.setValue(10);
                 pack(); // Resize the window to fit contents
                 setLocationRelativeTo(null); // Move window to the center of the screen
-                grid.reset();
+                terrainGrid.reset();
                 break;
             }
             case "start": {
@@ -121,9 +121,9 @@ class GUI extends JFrame {
             }
             case "setXCount": {
                 System.out.println("Changed X count");
-                grid.setXCount((double) xCountChoice.getSelectedItem());
+                terrainGrid.setXCount((double) xCountChoice.getSelectedItem());
 //                grid.revalidate();
-                grid.repaint();
+                terrainGrid.repaint();
 //                this.revalidate();
 //                this.repaint();
 //                this.pack();
@@ -131,9 +131,9 @@ class GUI extends JFrame {
             }
             case "setYCount": {
                 System.out.println("Changed Y count");
-                grid.setYCount((double) yCountChoice.getSelectedItem());
+                terrainGrid.setYCount((double) yCountChoice.getSelectedItem());
 //                grid.revalidate();
-                grid.repaint();
+                terrainGrid.repaint();
 //                this.revalidate();
 //                this.repaint();
 //                this.pack();

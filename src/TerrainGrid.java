@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-class Grid extends JComponent implements KeyListener {
+class TerrainGrid extends JComponent {
     private int cellSize = 10;
     private static final double margin = 1.0;
     static Double []Sizes = {50.0,100.0,200.0,500.0,1000.0};
@@ -11,8 +11,7 @@ class Grid extends JComponent implements KeyListener {
     private double YCount = 50.0;
     private boolean firstIteration = true;
 
-    Grid() {
-        addKeyListener(this);
+    TerrainGrid() {
         setFocusable(true);
         this.setPreferredSize(
                 new Dimension(
