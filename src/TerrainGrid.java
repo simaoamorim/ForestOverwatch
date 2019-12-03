@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 class TerrainGrid extends JComponent {
     private int cellSize = 10;
@@ -77,55 +75,5 @@ class TerrainGrid extends JComponent {
     void reset() {
         repaint();
         firstIteration = true;
-    }
-
-    // KeyListener methods
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        /*int code = e.getKeyCode();
-        switch (code) {
-            case KeyEvent.VK_LEFT: {// Left arrow
-                System.out.println("Left arrow clicked");
-                nextDirection = Snake.Direction.WEST;
-                break;
-            }
-            case KeyEvent.VK_UP: {// Up arrow
-                System.out.println("Up arrow clicked");
-                nextDirection = Snake.Direction.NORTH;
-                break;
-            }
-            case KeyEvent.VK_RIGHT: {// Right arrow
-                System.out.println("Right arrow clicked");
-                nextDirection = Snake.Direction.EAST;
-                break;
-            }
-            case KeyEvent.VK_DOWN: {// Down arrow
-                System.out.println("Down arrow clicked");
-                nextDirection = Snake.Direction.SOUTH;
-                break;
-            }
-            case KeyEvent.VK_ESCAPE: {
-                gui.startButton.doClick();
-                break;
-            }
-            case KeyEvent.VK_R: {
-                if (gui.resetButton.isEnabled()) {
-                    gui.resetButton.doClick();
-                }
-                break;
-            }
-            default : break;
-        }*/
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
     }
 }
