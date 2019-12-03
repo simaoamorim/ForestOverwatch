@@ -23,7 +23,6 @@ class GUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         initUI();
         pack();
-//        setMinimumSize(getSize());
         setLocationRelativeTo(null); // Center the frame on the screen
         setVisible(true);
         iterationTimer = new Timer(timeStep,this::timerHandler);
@@ -122,21 +121,13 @@ class GUI extends JFrame {
             case "setXCount": {
                 System.out.println("Changed X count");
                 terrainGrid.setXCount((double) xCountChoice.getSelectedItem());
-//                grid.revalidate();
                 terrainGrid.repaint();
-//                this.revalidate();
-//                this.repaint();
-//                this.pack();
                 break;
             }
             case "setYCount": {
                 System.out.println("Changed Y count");
                 terrainGrid.setYCount((double) yCountChoice.getSelectedItem());
-//                grid.revalidate();
                 terrainGrid.repaint();
-//                this.revalidate();
-//                this.repaint();
-//                this.pack();
                 break;
             }
             default: {

@@ -24,12 +24,7 @@ class TerrainGrid extends JComponent {
         super.paintComponent(g);
         System.out.println(String.format("Cell size: %dx%d", cellSize, cellSize));
         System.out.printf("Cell Count: %dx%d\n", (int)XCount, (int)YCount);
-//        for (Point fillCell : snake.getBody()) {
-//            int cellX = (int)(margin + (fillCell.x * cellWidth));
-//            int cellY = (int)(margin + (fillCell.y * cellHeight));
-//            g.setColor(Color.BLACK);
-//            g.fillRect(cellX, cellY, (int)cellWidth, (int)cellHeight);
-//        }
+        // TODO: Paint cells with appropriate colors
         double _width = (XCount * cellSize);
         double _height = (YCount * cellSize);
         this.setPreferredSize(new Dimension((int) (_width+(2*margin)), (int)(_height+(2*margin))));
@@ -45,9 +40,7 @@ class TerrainGrid extends JComponent {
     void iteration() {
         if (firstIteration) {
             firstIteration = false;
-//            System.out.printf("First direction: %s\n", nextDirection.toString());
         }
-//        snake.move(nextDirection);
         repaint();
         requestFocus();
     }
