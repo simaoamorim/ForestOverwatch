@@ -32,6 +32,7 @@ class GUI extends JFrame {
     private void initUI() {
         setLayout(new BorderLayout());
         terrainGrid = new TerrainGrid();
+        terrainGrid.initialize();
         panel2 = new JPanel();
         panel2.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel2.add(terrainGrid);
