@@ -1,14 +1,16 @@
+package Terrain;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-class GUI extends JFrame {
+public class TerrainFrame extends JFrame {
+    private static final Dimension frameSize = new Dimension(700,600);
+    private static final Dimension maxFrameSize = Toolkit.getDefaultToolkit().getScreenSize();
     private TerrainGrid terrainGrid;
     private JSlider slider;
     private JPanel panel2;
-    private static final Dimension frameSize = new Dimension(700,600);
-    private static final Dimension maxFrameSize = Toolkit.getDefaultToolkit().getScreenSize();
     private JComboBox<Integer> xCountChoice;
     private JComboBox<Integer> yCountChoice;
     private JButton startButton;
@@ -16,7 +18,7 @@ class GUI extends JFrame {
     private Timer iterationTimer = new Timer(timeStep, this::timerHandler);
     private static final int timeStep = 12; // Time in ms (1000/80 = 12.5)
 
-    GUI() {
+    public TerrainFrame() {
         setTitle("Forest Over-Watch - Terrain");
         setPreferredSize(frameSize);
         setMinimumSize(frameSize);
@@ -90,10 +92,6 @@ class GUI extends JFrame {
         );
     }
 
-    private void timerHandler(ActionEvent e) {
-        terrainGrid.iteration();
-    }
-
     private void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         switch (command) {
@@ -136,4 +134,9 @@ class GUI extends JFrame {
             }
         }
     }
+
+    private void timerHandler(ActionEvent e) {
+        terrainGrid.iteration();
+    }
+
 }

@@ -1,3 +1,5 @@
+package Application;
+
 import javax.swing.*;
 
 public class Launcher implements Runnable {
