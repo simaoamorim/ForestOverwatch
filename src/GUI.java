@@ -9,12 +9,12 @@ class GUI extends JFrame {
     private JPanel panel2;
     private static final Dimension frameSize = new Dimension(700,600);
     private static final Dimension maxFrameSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private JComboBox<Double> xCountChoice;
-    private JComboBox<Double> yCountChoice;
+    private JComboBox<Integer> xCountChoice;
+    private JComboBox<Integer> yCountChoice;
     private JButton startButton;
     private JButton resetButton;
-    private Timer iterationTimer;
-    private static final int timeStep = 100; // Time in ms
+    private Timer iterationTimer = new Timer(timeStep, this::timerHandler);
+    private static final int timeStep = 12; // Time in ms (1000/80 = 12.5)
 
     GUI() {
         setPreferredSize(frameSize);
@@ -120,13 +120,13 @@ class GUI extends JFrame {
             }
             case "setXCount": {
                 System.out.println("Changed X count");
-                terrainGrid.setXCount((double) xCountChoice.getSelectedItem());
+                terrainGrid.setXCount((int) xCountChoice.getSelectedItem());
                 terrainGrid.repaint();
                 break;
             }
             case "setYCount": {
                 System.out.println("Changed Y count");
-                terrainGrid.setYCount((double) yCountChoice.getSelectedItem());
+                terrainGrid.setYCount((int) yCountChoice.getSelectedItem());
                 terrainGrid.repaint();
                 break;
             }

@@ -3,18 +3,18 @@ import java.awt.*;
 
 class TerrainGrid extends JComponent {
     private int cellSize = 10;
-    private static final double margin = 1.0;
-    static Double []Sizes = {50.0,100.0,200.0,500.0,1000.0};
-    private double XCount = 50.0;
-    private double YCount = 50.0;
+    private static final int margin = 1;
+    static Integer[] Sizes = {50,100,200,500,1000};
+    private int XCount = 50;
+    private int YCount = 50;
     private boolean firstIteration = true;
 
     TerrainGrid() {
         setFocusable(true);
         this.setPreferredSize(
                 new Dimension(
-                        (int)((XCount *cellSize)+(2*margin)),
-                        (int)((YCount *cellSize)+(2*margin))
+                        (XCount *cellSize)+(2*margin),
+                        (YCount *cellSize)+(2*margin)
                 )
         );
     }
@@ -23,17 +23,17 @@ class TerrainGrid extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         System.out.println(String.format("Cell size: %dx%d", cellSize, cellSize));
-        System.out.printf("Cell Count: %dx%d\n", (int)XCount, (int)YCount);
+        System.out.printf("Cell Count: %dx%d\n", XCount, YCount);
         // TODO: Paint cells with appropriate colors
-        double _width = (XCount * cellSize);
-        double _height = (YCount * cellSize);
-        this.setPreferredSize(new Dimension((int) (_width+(2*margin)), (int)(_height+(2*margin))));
-        g.drawRect( (int) margin, (int) margin, (int) _width, (int)_height);
-        for (double x = margin; x <= _width; x += cellSize) {
-            g.drawLine((int) x, (int) margin, (int) x, (int) (_height+margin));
+        int _width = (XCount * cellSize);
+        int _height = (YCount * cellSize);
+        this.setPreferredSize(new Dimension( (_width+(2*margin)), (_height+(2*margin))));
+        g.drawRect( margin, margin, _width, _height);
+        for (int x = margin; x <= _width; x += cellSize) {
+            g.drawLine(x, margin, x, (_height+margin));
         }
-        for (double y = margin; y <= _height; y += cellSize) {
-            g.drawLine((int) margin, (int) y, (int) (_width+margin), (int) y);
+        for (int y = margin; y <= _height; y += cellSize) {
+            g.drawLine(margin, y, (_width+margin), y);
         }
     }
 
@@ -49,18 +49,18 @@ class TerrainGrid extends JComponent {
         cellSize = size;
         this.setPreferredSize(
                 new Dimension(
-                        (int)((XCount *cellSize)+(2*margin)),
-                        (int)((YCount *cellSize)+(2*margin))
+                        (XCount *cellSize)+(2*margin),
+                        (YCount *cellSize)+(2*margin)
                 )
         );
     }
 
-    void setXCount(double count) {
+    void setXCount(int count) {
         XCount = count;
         repaint();
     }
 
-    void setYCount(double count) {
+    void setYCount(int count) {
         YCount = count;
         repaint();
     }
