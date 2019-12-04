@@ -17,6 +17,7 @@ class GUI extends JFrame {
     private static final int timeStep = 12; // Time in ms (1000/80 = 12.5)
 
     GUI() {
+        setTitle("Forest Over-Watch - Terrain");
         setPreferredSize(frameSize);
         setMinimumSize(frameSize);
         setMaximumSize(maxFrameSize);
@@ -25,7 +26,6 @@ class GUI extends JFrame {
         pack();
         setLocationRelativeTo(null); // Center the frame on the screen
         setVisible(true);
-        iterationTimer = new Timer(timeStep,this::timerHandler);
         iterationTimer.stop();
     }
 
