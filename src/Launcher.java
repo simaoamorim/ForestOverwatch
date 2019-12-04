@@ -1,6 +1,5 @@
-package Application;
-
 import javax.swing.*;
+import java.io.IOException;
 
 public class Launcher implements Runnable {
     public static void main(String[] args) {
@@ -9,6 +8,10 @@ public class Launcher implements Runnable {
 
     @Override
     public void run() {
-        new GUI();
+        try {
+            new GUI();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
