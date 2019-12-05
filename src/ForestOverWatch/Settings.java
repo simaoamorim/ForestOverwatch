@@ -1,3 +1,5 @@
+package ForestOverWatch;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
@@ -6,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JComboBox<Integer> yCountChoice;
@@ -14,10 +17,12 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JSlider slider;
     private TerrainFrame terrainFrame;
     private Properties localProperties = new Properties();
+    private Logger logger;
 
-    Settings() throws IOException {
+    Settings(Logger logger) throws IOException {
+        this.logger = logger;
         loadProperties();
-        localProperties.list(System.out);
+        logger.config(localProperties.toString());
         setTitle("Forest Over-Watch - Settings");
         initUI();
         pack();
@@ -78,7 +83,9 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         String command = e.getActionCommand();
         switch (command) {
             case "reset" : {
-                terrainFrame.dispose();
+                logger.fine("Application reset");
+                if (terrainFrame != null)
+                    terrainFrame.dispose();
                 xCountChoice.setSelectedItem(50);
                 yCountChoice.setSelectedItem(50);
                 slider.setValue(10);
@@ -86,22 +93,18 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 break;
             }
             case "start": {
-                localProperties.setProperty("XCount", Objects.requireNonNull(xCountChoice.getSelectedItem()).toString());
-                localProperties.setProperty("YCount", Objects.requireNonNull(yCountChoice.getSelectedItem()).toString());
-//                setVisible(false);
+                if (terrainFrame != null) terrainFrame.dispose();
                 terrainFrame = new TerrainFrame(localProperties, this);
                 break;
             }
             case "setXCount": {
-                System.out.println("Changed X count");
                 localProperties.setProperty("XCount", Objects.requireNonNull(xCountChoice.getSelectedItem()).toString());
-//                localProperties.list(System.out);
+                logger.config("XCount changed to "+localProperties.getProperty("XCount"));
                 break;
             }
             case "setYCount": {
-                System.out.println("Changed Y count");
                 localProperties.setProperty("YCount", Objects.requireNonNull(yCountChoice.getSelectedItem()).toString());
-//                localProperties.list(System.out);
+                logger.config("YCount changed to "+localProperties.getProperty("YCount"));
                 break;
             }
             default: {
@@ -111,7 +114,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     }
 
     private void loadProperties() throws IOException {
-        FileInputStream defaultPreferencesFile = new FileInputStream( "./src/default.cfg");
+        FileInputStream defaultPreferencesFile = new FileInputStream( "default.cfg");
         localProperties.load(defaultPreferencesFile);
         defaultPreferencesFile.close();
 
@@ -120,8 +123,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
             localProperties.load(userPreferencesFile);
             userPreferencesFile.close();
         } catch (IOException e) {
-            System.err.println("No user config file found");
-            System.err.println(e.getMessage());
+            logger.warning("No user config file found: "+e.getMessage());
         }
     }
 

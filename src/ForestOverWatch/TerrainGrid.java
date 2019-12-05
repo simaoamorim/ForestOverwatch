@@ -1,3 +1,5 @@
+package ForestOverWatch;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -81,6 +83,7 @@ class TerrainGrid extends JComponent {
         int _width = (XCount * cellSize);
         int _height = (YCount * cellSize);
         this.setPreferredSize(new Dimension( (_width+(2*margin)), (_height+(2*margin))));
+        g.setColor(Color.BLACK);
         g.drawRect( margin, margin, _width, _height);
         for (int x = margin; x <= _width; x += cellSize) {
             g.drawLine(x, margin, x, (_height+margin));
