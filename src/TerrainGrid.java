@@ -5,12 +5,14 @@ class TerrainGrid extends JComponent {
     private int cellSize = 10;
     private static final int margin = 1;
     public static Integer[] Sizes = {50,100,200,500,1000};
-    private int XCount = 50;
-    private int YCount = 50;
+    private int XCount;
+    private int YCount;
     private boolean firstIteration = true;
     private TerrainPoint[][] terrainPoints;
 
-    TerrainGrid() {
+    TerrainGrid(int XCount, int YCount) {
+        this.XCount = XCount;
+        this.YCount = YCount;
         setFocusable(true);
         this.setPreferredSize(
                 new Dimension(

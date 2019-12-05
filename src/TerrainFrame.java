@@ -30,6 +30,7 @@ public class TerrainFrame extends JFrame {
         setMinimumSize(frameSize);
         setMaximumSize(maxFrameSize);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
+        setLocation(settings.getX()+settings.getWidth(), settings.getY());
         initUI();
         pack();
         setVisible(true);
@@ -38,7 +39,7 @@ public class TerrainFrame extends JFrame {
 
     private void initUI() {
         setLayout(new BorderLayout());
-        terrainGrid = new TerrainGrid();
+        terrainGrid = new TerrainGrid(Integer.parseInt(localProperties.getProperty("XCount")), Integer.parseInt(localProperties.getProperty("YCount")));
         terrainGrid.initialize();
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));

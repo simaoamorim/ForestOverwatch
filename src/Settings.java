@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 
 public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
@@ -17,10 +18,10 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     Settings() throws IOException {
         loadProperties();
         localProperties.list(System.out);
+        setTitle("Forest Over-Watch - Settings");
         initUI();
         pack();
         setLocation(10,10);
-//        terrainFrame.setLocation(getX()+getWidth(), getY());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -30,12 +31,12 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         JPanel buttonsPanel = new JPanel(new SpringLayout());
         xCountChoice = new JComboBox<>(TerrainFrame.Sizes);
         xCountChoice.setFocusable(false);
-//        xCountChoice.setActionCommand("setXCount");
-//        xCountChoice.addActionListener(this::actionPerformed);
+        xCountChoice.setActionCommand("setXCount");
+        xCountChoice.addActionListener(this::actionPerformed);
         yCountChoice = new JComboBox<>(TerrainFrame.Sizes);
         yCountChoice.setFocusable(false);
-//        yCountChoice.setActionCommand("setYCount");
-//        yCountChoice.addActionListener(this::actionPerformed);
+        yCountChoice.setActionCommand("setYCount");
+        yCountChoice.addActionListener(this::actionPerformed);
         resetButton = new JButton("Reset");
         resetButton.setActionCommand("reset");
         resetButton.addActionListener(this::actionPerformed);
@@ -77,44 +78,32 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         String command = e.getActionCommand();
         switch (command) {
             case "reset" : {
-                xCountChoice.setSelectedItem(50.0);
-                yCountChoice.setSelectedItem(50.0);
+                terrainFrame.dispose();
+                xCountChoice.setSelectedItem(50);
+                yCountChoice.setSelectedItem(50);
                 slider.setValue(10);
                 pack(); // Resize the window to fit contents
-//                setLocationRelativeTo(null); // Move window to the center of the screen
-                terrainFrame.reset();
                 break;
             }
             case "start": {
-//                terrainFrame = new TerrainFrame(localProperties);
-                setVisible(false);
+                localProperties.setProperty("XCount", Objects.requireNonNull(xCountChoice.getSelectedItem()).toString());
+                localProperties.setProperty("YCount", Objects.requireNonNull(yCountChoice.getSelectedItem()).toString());
+//                setVisible(false);
                 terrainFrame = new TerrainFrame(localProperties, this);
-//                if (! terrainFrame.isRunning()) {
-//                    terrainFrame.startIteration();
-//                    startButton.setText("Pause");
-//                    resetButton.setEnabled(false);
-//                }
-//                else {
-//                    terrainFrame.stopIteration();
-//                    startButton.setText("Start");
-//                    resetButton.setEnabled(true);
-//                }
                 break;
-            }/*
+            }
             case "setXCount": {
                 System.out.println("Changed X count");
-                localProperties.setProperty("XCount", Objects.requireNonNull(xCountChoice.getSelectedItem()).toString() );
-                localProperties.list(System.out);
-//                terrainFrame.setXCount((int) xCountChoice.getSelectedItem());
-//                terrainFrame.repaint();
+                localProperties.setProperty("XCount", Objects.requireNonNull(xCountChoice.getSelectedItem()).toString());
+//                localProperties.list(System.out);
                 break;
             }
             case "setYCount": {
                 System.out.println("Changed Y count");
-//                terrainFrame.setYCount((int) yCountChoice.getSelectedItem());
-//                terrainFrame.repaint();
+                localProperties.setProperty("YCount", Objects.requireNonNull(yCountChoice.getSelectedItem()).toString());
+//                localProperties.list(System.out);
                 break;
-            }*/
+            }
             default: {
                 break;
             }
