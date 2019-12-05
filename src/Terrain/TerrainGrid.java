@@ -6,7 +6,7 @@ import java.awt.*;
 class TerrainGrid extends JComponent {
     private int cellSize = 10;
     private static final int margin = 1;
-    static Integer[] Sizes = {50,100,200,500,1000};
+    public static Integer[] Sizes = {50,100,200,500,1000};
     private int XCount = 50;
     private int YCount = 50;
     private boolean firstIteration = true;
@@ -22,7 +22,7 @@ class TerrainGrid extends JComponent {
         );
     }
 
-    public void initialize() {
+    void initialize() {
         terrainPoints = new TerrainPoint[XCount][YCount];
         for (int x = 0; x < XCount; x++)
             for (int y = 0; y < YCount; y++)

@@ -1,18 +1,15 @@
-import Terrain.TerrainFrame;
-
-import javax.swing.JFrame;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 class GUI {
-    private JFrame terrainFrame;
+    private Settings settings;
     private Properties localProperties = new Properties();
 
     GUI() throws IOException {
         LoadProperties();
         localProperties.list(System.out);
-        terrainFrame = new TerrainFrame();
+        settings = new Settings();
     }
 
     private void LoadProperties() throws IOException {
