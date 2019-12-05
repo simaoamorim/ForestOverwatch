@@ -93,6 +93,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 break;
             }
             case "start": {
+                if (terrainFrame != null) terrainFrame.dispose();
                 terrainFrame = new TerrainFrame(localProperties, this);
                 break;
             }
