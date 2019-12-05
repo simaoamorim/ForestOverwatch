@@ -62,6 +62,76 @@ class TerrainGrid extends JComponent {
                 terrainPoints[x][y].setType(TerrainPoint.Types.getRandom());
             }
         }
+        System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
+
+        softTerrain();
+    }
+
+    private void softTerrain(){
+        for (int x = 0; x < XCount; x++) {
+            for (int y = 0; y < YCount; y++) {
+                int water = 0, tree = 0, ground = 0;
+                for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
+                    switch (terrainPoints[x][y].neighbours.get(z).getType()) {
+                        case GROUND: ground++; break;
+                        case TREE: tree++; break;
+                        case WATER: water++; break;
+                    }
+                }
+                if((water > Math.max(tree,ground)) && (countTerrain(TerrainPoint.Types.WATER) < XCount*YCount/4 )){
+                    terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
+                } else if((tree > Math.max(water,ground))  && (countTerrain(TerrainPoint.Types.TREE) < XCount*YCount/4)){
+                    terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
+                } else if((ground > Math.max(water,tree)) && (countTerrain(TerrainPoint.Types.GROUND) < XCount*YCount/2)){
+                    terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
+                }
+            }
+        }
+        for (int x = 0; x < XCount; x++) {
+            for (int y = 0; y < YCount; y++) {
+                int water = 0, tree = 0, ground = 0;
+                for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
+                    switch (terrainPoints[x][y].neighbours.get(z).getType()) {
+                        case GROUND: ground++; break;
+                        case TREE: tree++; break;
+                        case WATER: water++; break;
+                    }
+                }
+                //System.out.printf("water: %d ground: %d tree: %d\n",water,ground,tree);
+                if((water < 2) && (terrainPoints[x][y].getType() == TerrainPoint.Types.WATER)){
+                    if(ground >= tree){
+                        terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
+                    } else{
+                        terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
+                    }
+                } else if((tree < 2) && (terrainPoints[x][y].getType() == TerrainPoint.Types.TREE)){
+                    if(ground >= water){
+                        terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
+                    } else{
+                        terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
+                    }
+                } else if((ground < 2) && (terrainPoints[x][y].getType() == TerrainPoint.Types.GROUND)){
+                    if(tree >= water){
+                        terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
+                    } else{
+                        terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
+                    }
+                }
+            }
+        }
+        System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
+    }
+
+    protected int countTerrain(TerrainPoint.Types terrain){
+        int terrain_count = 0;
+        for (int x = 0; x < XCount; x++) {
+            for (int y = 0; y < YCount; y++) {
+                if(terrainPoints[x][y].getType() == terrain)
+                    terrain_count++;
+            }
+        }
+        //System.out.printf("%s %d\n", terrain, terrain_count);
+        return terrain_count;
     }
 
     @Override

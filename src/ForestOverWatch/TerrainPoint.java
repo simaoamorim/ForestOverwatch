@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 class TerrainPoint {
-    private ArrayList<TerrainPoint> neighbours;
+    ArrayList<TerrainPoint> neighbours;
     private Types type;
     enum Types {WATER,TREE,GROUND;
         public static Types getRandom() {
