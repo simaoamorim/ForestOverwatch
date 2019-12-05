@@ -1,9 +1,10 @@
-import Terrain.TerrainFrame;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JComboBox<Integer> yCountChoice;
@@ -11,13 +12,15 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JButton resetButton;
     private JSlider slider;
     private TerrainFrame terrainFrame;
+    private Properties localProperties = new Properties();
 
-    Settings() {
-        terrainFrame = new TerrainFrame();
+    Settings() throws IOException {
+        loadProperties();
+        localProperties.list(System.out);
         initUI();
         pack();
         setLocation(10,10);
-        terrainFrame.setLocation(getX()+getWidth(), getY());
+//        terrainFrame.setLocation(getX()+getWidth(), getY());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -27,12 +30,12 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         JPanel buttonsPanel = new JPanel(new SpringLayout());
         xCountChoice = new JComboBox<>(TerrainFrame.Sizes);
         xCountChoice.setFocusable(false);
-        xCountChoice.setActionCommand("setXCount");
-        xCountChoice.addActionListener(this::actionPerformed);
+//        xCountChoice.setActionCommand("setXCount");
+//        xCountChoice.addActionListener(this::actionPerformed);
         yCountChoice = new JComboBox<>(TerrainFrame.Sizes);
         yCountChoice.setFocusable(false);
-        yCountChoice.setActionCommand("setYCount");
-        yCountChoice.addActionListener(this::actionPerformed);
+//        yCountChoice.setActionCommand("setYCount");
+//        yCountChoice.addActionListener(this::actionPerformed);
         resetButton = new JButton("Reset");
         resetButton.setActionCommand("reset");
         resetButton.addActionListener(this::actionPerformed);
@@ -78,38 +81,58 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 yCountChoice.setSelectedItem(50.0);
                 slider.setValue(10);
                 pack(); // Resize the window to fit contents
-                setLocationRelativeTo(null); // Move window to the center of the screen
+//                setLocationRelativeTo(null); // Move window to the center of the screen
                 terrainFrame.reset();
                 break;
             }
             case "start": {
-                if (! terrainFrame.isRunning()) {
-                    terrainFrame.startIteration();
-                    startButton.setText("Pause");
-                    resetButton.setEnabled(false);
-                }
-                else {
-                    terrainFrame.stopIteration();
-                    startButton.setText("Start");
-                    resetButton.setEnabled(true);
-                }
+//                terrainFrame = new TerrainFrame(localProperties);
+                setVisible(false);
+                terrainFrame = new TerrainFrame(localProperties, this);
+//                if (! terrainFrame.isRunning()) {
+//                    terrainFrame.startIteration();
+//                    startButton.setText("Pause");
+//                    resetButton.setEnabled(false);
+//                }
+//                else {
+//                    terrainFrame.stopIteration();
+//                    startButton.setText("Start");
+//                    resetButton.setEnabled(true);
+//                }
                 break;
-            }
+            }/*
             case "setXCount": {
                 System.out.println("Changed X count");
-                terrainFrame.setXCount((int) xCountChoice.getSelectedItem());
-                terrainFrame.repaint();
+                localProperties.setProperty("XCount", Objects.requireNonNull(xCountChoice.getSelectedItem()).toString() );
+                localProperties.list(System.out);
+//                terrainFrame.setXCount((int) xCountChoice.getSelectedItem());
+//                terrainFrame.repaint();
                 break;
             }
             case "setYCount": {
                 System.out.println("Changed Y count");
-                terrainFrame.setYCount((int) yCountChoice.getSelectedItem());
-                terrainFrame.repaint();
+//                terrainFrame.setYCount((int) yCountChoice.getSelectedItem());
+//                terrainFrame.repaint();
                 break;
-            }
+            }*/
             default: {
                 break;
             }
+        }
+    }
+
+    private void loadProperties() throws IOException {
+        FileInputStream defaultPreferencesFile = new FileInputStream( "./src/default.cfg");
+        localProperties.load(defaultPreferencesFile);
+        defaultPreferencesFile.close();
+
+        try {
+            FileInputStream userPreferencesFile = new FileInputStream("config.cfg");
+            localProperties.load(userPreferencesFile);
+            userPreferencesFile.close();
+        } catch (IOException e) {
+            System.err.println("No user config file found");
+            System.err.println(e.getMessage());
         }
     }
 

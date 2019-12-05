@@ -1,5 +1,3 @@
-package Terrain;
-
 import javax.swing.*;
 import java.awt.*;
 

@@ -1,8 +1,9 @@
-package Terrain;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Properties;
 
 public class TerrainFrame extends JFrame {
     private static final Dimension frameSize = new Dimension(700,600);
@@ -11,8 +12,19 @@ public class TerrainFrame extends JFrame {
     public Timer iterationTimer = new Timer(timeStep, this::timerHandler);
     private static final int timeStep = 12; // Time in ms (1000/80 = 12.5)
     public static Integer[] Sizes = TerrainGrid.Sizes;
+    private Properties localProperties;
+    private Settings settings;
 
-    public TerrainFrame() {
+    public TerrainFrame(Properties localProperties, Settings settings) {
+        this.localProperties = localProperties;
+        this.settings = settings;
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                settings.setVisible(true);
+            }
+        });
         setTitle("Forest Over-Watch - Terrain");
         setPreferredSize(frameSize);
         setMinimumSize(frameSize);

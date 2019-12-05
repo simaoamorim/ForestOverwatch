@@ -9,7 +9,7 @@ public class Launcher implements Runnable {
     @Override
     public void run() {
         try {
-            new GUI();
+            new Settings();
         } catch (IOException e) {
             e.printStackTrace();
         }
