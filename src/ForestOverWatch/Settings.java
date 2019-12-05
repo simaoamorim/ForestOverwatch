@@ -1,3 +1,5 @@
+package ForestOverWatch;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
@@ -86,9 +88,6 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 break;
             }
             case "start": {
-                localProperties.setProperty("XCount", Objects.requireNonNull(xCountChoice.getSelectedItem()).toString());
-                localProperties.setProperty("YCount", Objects.requireNonNull(yCountChoice.getSelectedItem()).toString());
-//                setVisible(false);
                 terrainFrame = new TerrainFrame(localProperties, this);
                 break;
             }
@@ -111,7 +110,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     }
 
     private void loadProperties() throws IOException {
-        FileInputStream defaultPreferencesFile = new FileInputStream( "./src/default.cfg");
+        FileInputStream defaultPreferencesFile = new FileInputStream( "default.cfg");
         localProperties.load(defaultPreferencesFile);
         defaultPreferencesFile.close();
 
