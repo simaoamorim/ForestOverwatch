@@ -78,15 +78,17 @@ class TerrainGrid extends JComponent {
                         case WATER: water++; break;
                     }
                 }
-                if((water > Math.max(tree,ground)) && (countTerrain(TerrainPoint.Types.WATER) < XCount*YCount/4 )){
+                if((water > Math.max(tree,ground))){
                     terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
-                } else if((tree > Math.max(water,ground))  && (countTerrain(TerrainPoint.Types.TREE) < XCount*YCount/4)){
+                } else if((tree > Math.max(water,ground))){
                     terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
                 } else if((ground > Math.max(water,tree)) && (countTerrain(TerrainPoint.Types.GROUND) < XCount*YCount/2)){
                     terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
                 }
             }
         }
+        System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
+
         for (int x = 0; x < XCount; x++) {
             for (int y = 0; y < YCount; y++) {
                 int water = 0, tree = 0, ground = 0;
@@ -98,19 +100,19 @@ class TerrainGrid extends JComponent {
                     }
                 }
                 //System.out.printf("water: %d ground: %d tree: %d\n",water,ground,tree);
-                if((water < 2) && (terrainPoints[x][y].getType() == TerrainPoint.Types.WATER)){
+                if((water < 3) && (terrainPoints[x][y].getType() == TerrainPoint.Types.WATER)){
                     if(ground >= tree){
                         terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
                     } else{
                         terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
                     }
-                } else if((tree < 2) && (terrainPoints[x][y].getType() == TerrainPoint.Types.TREE)){
+                } else if((tree < 3) && (terrainPoints[x][y].getType() == TerrainPoint.Types.TREE)){
                     if(ground >= water){
                         terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
                     } else{
                         terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
                     }
-                } else if((ground < 2) && (terrainPoints[x][y].getType() == TerrainPoint.Types.GROUND)){
+                } else if((ground < 3) && (terrainPoints[x][y].getType() == TerrainPoint.Types.GROUND)){
                     if(tree >= water){
                         terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
                     } else{
