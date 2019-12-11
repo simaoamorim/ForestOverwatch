@@ -63,7 +63,6 @@ class TerrainGrid extends JComponent {
             }
         }
         System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
-
         softTerrain();
     }
 
@@ -87,7 +86,6 @@ class TerrainGrid extends JComponent {
                 }
             }
         }
-        System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
 
         for (int x = 0; x < XCount; x++) {
             for (int y = 0; y < YCount; y++) {
@@ -99,7 +97,6 @@ class TerrainGrid extends JComponent {
                         case WATER: water++; break;
                     }
                 }
-                //System.out.printf("water: %d ground: %d tree: %d\n",water,ground,tree);
                 if((water < 3) && (terrainPoints[x][y].getType() == TerrainPoint.Types.WATER)){
                     if(ground >= tree){
                         terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
@@ -121,6 +118,38 @@ class TerrainGrid extends JComponent {
                 }
             }
         }
+        for (int x = 0; x < XCount; x++) {
+            for (int y = 0; y < YCount; y++) {
+                int water = 0, tree = 0, ground = 0;
+                for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
+                    switch (terrainPoints[x][y].neighbours.get(z).getType()) {
+                        case GROUND: ground++; break;
+                        case TREE: tree++; break;
+                        case WATER: water++; break;
+                    }
+                }
+                if((water == 0) && (terrainPoints[x][y].getType() == TerrainPoint.Types.WATER)){
+                    if(ground >= tree){
+                        terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
+                    } else{
+                        terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
+                    }
+                } else if((tree == 0) && (terrainPoints[x][y].getType() == TerrainPoint.Types.TREE)){
+                    if(ground >= water){
+                        terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
+                    } else{
+                        terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
+                    }
+                } else if((ground == 0) && (terrainPoints[x][y].getType() == TerrainPoint.Types.GROUND)){
+                    if(tree >= water){
+                        terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
+                    } else{
+                        terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
+                    }
+                }
+            }
+        }
+
         System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
     }
 
@@ -132,7 +161,6 @@ class TerrainGrid extends JComponent {
                     terrain_count++;
             }
         }
-        //System.out.printf("%s %d\n", terrain, terrain_count);
         return terrain_count;
     }
 
