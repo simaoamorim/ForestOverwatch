@@ -175,7 +175,7 @@ class TerrainGrid extends JComponent {
                     case GROUND: g.setColor(new Color(0xAA4400)); break;
                     case TREE: g.setColor(new Color( 0x00AA00)); break;
                     case WATER: g.setColor(new Color(0x0066FF)); break;
-                    case FIRE: g.setColor(new Color(0xE2321E)); break;
+                    case FIRE: g.setColor(new Color(0xE25822)); break;
                     default: g.setColor(getBackground());
                 }
                 g.fillRect(margin+(x*cellSize), margin+(y*cellSize), cellSize, cellSize);
