@@ -34,18 +34,18 @@ class TerrainGrid extends JComponent {
         for (int x = 0; x < XCount; x++) {
             for (int y = 0; y < YCount; y++) {
                 if (y > 0)
-                    terrainPoints[x][y].addNeighbour(terrainPoints[x][y - 1]);
+                    terrainPoints[x][y].addNeighbour(terrainPoints[x][y - 1]); //Von Neumann neighborhood
                 if (y < YCount - 1)
-                    terrainPoints[x][y].addNeighbour(terrainPoints[x][y + 1]);
+                    terrainPoints[x][y].addNeighbour(terrainPoints[x][y + 1]); //Von Neumann neighborhood
                 if (x > 0) {
-                    terrainPoints[x][y].addNeighbour(terrainPoints[x - 1][y]);
+                    terrainPoints[x][y].addNeighbour(terrainPoints[x - 1][y]); //Von Neumann neighborhood
                     if (y > 0)
                         terrainPoints[x][y].addNeighbour(terrainPoints[x - 1][y - 1]);
                     if (y < YCount - 1)
                         terrainPoints[x][y].addNeighbour(terrainPoints[x - 1][y + 1]);
                 }
                 if (x < XCount - 1) {
-                    terrainPoints[x][y].addNeighbour(terrainPoints[x + 1][y]);
+                    terrainPoints[x][y].addNeighbour(terrainPoints[x + 1][y]); //Von Neumann neighborhood
                     if (y > 0)
                         terrainPoints[x][y].addNeighbour(terrainPoints[x + 1][y - 1]);
                     if (y < YCount - 1)
@@ -153,7 +153,7 @@ class TerrainGrid extends JComponent {
         System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
     }
 
-    protected int countTerrain(TerrainPoint.Types terrain){
+    private int countTerrain(TerrainPoint.Types terrain){
         int terrain_count = 0;
         for (int x = 0; x < XCount; x++) {
             for (int y = 0; y < YCount; y++) {
@@ -175,6 +175,7 @@ class TerrainGrid extends JComponent {
                     case GROUND: g.setColor(new Color(0xAA4400)); break;
                     case TREE: g.setColor(new Color( 0x00AA00)); break;
                     case WATER: g.setColor(new Color(0x0066FF)); break;
+                    case FIRE: g.setColor(new Color(0xE2321E)); break;
                     default: g.setColor(getBackground());
                 }
                 g.fillRect(margin+(x*cellSize), margin+(y*cellSize), cellSize, cellSize);
