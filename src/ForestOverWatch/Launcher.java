@@ -1,7 +1,6 @@
 package ForestOverWatch;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,11 +19,7 @@ public class Launcher implements Runnable {
         logger.setUseParentHandlers(false);
         logger.setLevel(Level.FINE);
         logger.addHandler(consoleHandler);
-        try {
-            new Settings(logger);
-            logger.fine("Settings window created");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new Settings(logger);
+        logger.fine("Settings window created");
     }
 }
