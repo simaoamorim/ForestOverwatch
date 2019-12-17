@@ -59,15 +59,19 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         slider.setFocusable(false);
         resetButton.setSize(100,60);
         buttonsPanel.setLayout(new GridLayout(0,2));
-        buttonsPanel.add(new JLabel("Width:"));
+        buttonsPanel.add(new JLabel("Width:", JLabel.RIGHT));
         buttonsPanel.add(xCountChoice);
-        buttonsPanel.add(new JLabel("Height:"));
+//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
+        buttonsPanel.add(new JLabel("Height:", JLabel.RIGHT));
         buttonsPanel.add(yCountChoice);
+//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
+        buttonsPanel.add(new JLabel("Zoom:", JLabel.RIGHT));
+        buttonsPanel.add(slider);
+//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
+//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
         buttonsPanel.add(startButton);
         buttonsPanel.add(resetButton);
-        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
-        buttonsPanel.add(new JLabel("Zoom:"));
-        buttonsPanel.add(slider);
+//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
         add(buttonsPanel);
     }
 
