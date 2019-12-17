@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -19,7 +20,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private Properties localProperties = new Properties();
     private Logger logger;
 
-    Settings(Logger logger) throws IOException {
+    Settings(Logger logger) {
         this.logger = logger;
         loadProperties();
         logger.config(localProperties.toString());
@@ -58,15 +59,19 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         slider.setFocusable(false);
         resetButton.setSize(100,60);
         buttonsPanel.setLayout(new GridLayout(0,2));
-        buttonsPanel.add(new JLabel("Width:"));
+        buttonsPanel.add(new JLabel("Width:", JLabel.RIGHT));
         buttonsPanel.add(xCountChoice);
-        buttonsPanel.add(new JLabel("Height:"));
+//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
+        buttonsPanel.add(new JLabel("Height:", JLabel.RIGHT));
         buttonsPanel.add(yCountChoice);
+//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
+        buttonsPanel.add(new JLabel("Zoom:", JLabel.RIGHT));
+        buttonsPanel.add(slider);
+//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
+//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
         buttonsPanel.add(startButton);
         buttonsPanel.add(resetButton);
-        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
-        buttonsPanel.add(new JLabel("Zoom:"));
-        buttonsPanel.add(slider);
+//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
         add(buttonsPanel);
     }
 
@@ -113,10 +118,14 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         }
     }
 
-    private void loadProperties() throws IOException {
-        FileInputStream defaultPreferencesFile = new FileInputStream( "default.cfg");
-        localProperties.load(defaultPreferencesFile);
-        defaultPreferencesFile.close();
+    private void loadProperties() {
+        try {
+            InputStream defaultPreferencesFile = getClass().getResourceAsStream("default.cfg");
+            localProperties.load(defaultPreferencesFile);
+            defaultPreferencesFile.close();
+        } catch (IOException e) {
+            logger.severe("No default config file found: "+e.getMessage());
+        }
 
         try {
             FileInputStream userPreferencesFile = new FileInputStream("config.cfg");
