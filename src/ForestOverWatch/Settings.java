@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -19,7 +20,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private Properties localProperties = new Properties();
     private Logger logger;
 
-    Settings(Logger logger) throws IOException {
+    Settings(Logger logger) {
         this.logger = logger;
         loadProperties();
         logger.config(localProperties.toString());
@@ -113,10 +114,14 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         }
     }
 
-    private void loadProperties() throws IOException {
-        FileInputStream defaultPreferencesFile = new FileInputStream( "default.cfg");
-        localProperties.load(defaultPreferencesFile);
-        defaultPreferencesFile.close();
+    private void loadProperties() {
+        try {
+            InputStream defaultPreferencesFile = getClass().getResourceAsStream("default.cfg");
+            localProperties.load(defaultPreferencesFile);
+            defaultPreferencesFile.close();
+        } catch (IOException e) {
+            logger.severe("No default config file found: "+e.getMessage());
+        }
 
         try {
             FileInputStream userPreferencesFile = new FileInputStream("config.cfg");
