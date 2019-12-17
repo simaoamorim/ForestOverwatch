@@ -36,8 +36,7 @@ public class TerrainFrame extends JFrame {
         initUI();
         pack();
         setVisible(true);
-//        iterationTimer.stop();
-        iterationTimer.start();
+        iterationTimer.stop();
     }
 
     private void initUI() {
@@ -68,5 +67,10 @@ public class TerrainFrame extends JFrame {
     public void setXCount(int count) { terrainGrid.setXCount(count); }
 
     public void setYCount(int count) { terrainGrid.setYCount(count); }
+
+    void randomizeFire() {
+        terrainGrid.randomizeFire();
+        repaint();
+    }
 
 }

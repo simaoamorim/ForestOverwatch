@@ -2,6 +2,7 @@ package ForestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 class TerrainGrid extends JComponent {
     private int cellSize = 10;
@@ -64,6 +65,17 @@ class TerrainGrid extends JComponent {
         }
         System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
         softTerrain();
+    }
+
+    void randomizeFire() {
+        int count = new Random().nextInt(10);
+        for (int i = 0; i < count; i++) {
+            int x = new Random().nextInt(XCount);
+            int y = new Random().nextInt(YCount);
+            TerrainPoint.Types type = terrainPoints[x][y].getType();
+            if (type == TerrainPoint.Types.GROUND || type == TerrainPoint.Types.TREE)
+                terrainPoints[x][y].setType(TerrainPoint.Types.FIRE);
+        }
     }
 
     private void softTerrain(){
@@ -172,10 +184,10 @@ class TerrainGrid extends JComponent {
         for (int x = 0; x < XCount; x++) {
             for (int y = 0; y < YCount; y++) {
                 switch (terrainPoints[x][y].getType()) {
-                    case GROUND: g.setColor(new Color(0xAA4400)); break;
+                    case GROUND: g.setColor(new Color(0xC77522)); break;
                     case TREE: g.setColor(new Color( 0x00AA00)); break;
                     case WATER: g.setColor(new Color(0x0066FF)); break;
-                    case FIRE: g.setColor(new Color(0xE25822)); break;
+                    case FIRE: g.setColor(new Color(0xFF0000)); break;
                     default: g.setColor(getBackground());
                 }
                 g.fillRect(margin+(x*cellSize), margin+(y*cellSize), cellSize, cellSize);
@@ -200,7 +212,8 @@ class TerrainGrid extends JComponent {
         }
         for (int x = 0; x < XCount; x++) {
             for (int y = 0; y < YCount; y++) {
-                terrainPoints[x][y].fireSpreading();
+                if (terrainPoints[x][y].getType() == TerrainPoint.Types.FIRE)
+                    terrainPoints[x][y].fireSpreading();
             }
         }
         repaint();
