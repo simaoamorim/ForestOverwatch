@@ -198,6 +198,11 @@ class TerrainGrid extends JComponent {
         if (firstIteration) {
             firstIteration = false;
         }
+        for (int x = 0; x < XCount; x++) {
+            for (int y = 0; y < YCount; y++) {
+                terrainPoints[x][y].fireSpreading();
+            }
+        }
         repaint();
         requestFocus();
     }

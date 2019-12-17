@@ -36,7 +36,8 @@ public class TerrainFrame extends JFrame {
         initUI();
         pack();
         setVisible(true);
-        iterationTimer.stop();
+//        iterationTimer.stop();
+        iterationTimer.start();
     }
 
     private void initUI() {
