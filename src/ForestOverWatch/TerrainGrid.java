@@ -2,7 +2,12 @@ package ForestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Random;
+import java.util.logging.Logger;
 
 class TerrainGrid extends JComponent {
     private int cellSize = 10;
@@ -12,10 +17,12 @@ class TerrainGrid extends JComponent {
     private int YCount;
     private boolean firstIteration = true;
     private TerrainPoint[][] terrainPoints;
+    private Logger logger;
 
-    TerrainGrid(int XCount, int YCount) {
+    TerrainGrid(int XCount, int YCount, Logger logger) {
         this.XCount = XCount;
         this.YCount = YCount;
+        this.logger = logger;
         setFocusable(true);
         this.setPreferredSize(
                 new Dimension(
@@ -243,5 +250,14 @@ class TerrainGrid extends JComponent {
     void reset() {
         repaint();
         firstIteration = true;
+    }
+
+    void saveTerrain(String path) throws IOException {
+        FileOutputStream f = new FileOutputStream(path);
+        ObjectOutputStream o = new ObjectOutputStream(f);
+        o.writeObject(terrainPoints);
+        o.close();
+        f.close();
+        logger.info("terrainPoints saved to file \""+path+"\"");
     }
 }

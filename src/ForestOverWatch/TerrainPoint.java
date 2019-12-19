@@ -1,10 +1,11 @@
 package ForestOverWatch;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-class TerrainPoint {
-    ArrayList<TerrainPoint> neighbours;
+class TerrainPoint implements Serializable {
+    transient ArrayList<TerrainPoint> neighbours;
     private Types type;
     private double FirePercentage = 0;
     enum Types {WATER,TREE,GROUND,FIRE;
