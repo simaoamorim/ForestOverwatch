@@ -4,11 +4,11 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
@@ -17,6 +17,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JButton resetButton;
     private JButton startButton;
     private JButton randomizeButton;
+    private JButton saveTerrain;
     private JSlider slider;
     private TerrainFrame terrainFrame;
     private Properties localProperties = new Properties();
@@ -63,6 +64,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         randomizeButton.addActionListener(this::actionPerformed);
         randomizeButton.setFocusable(false);
         randomizeButton.setEnabled(false);
+        saveTerrain = new JButton("Save Terrain Layout");
+        saveTerrain.setFocusable(false);
+        saveTerrain.setActionCommand("saveTerrain");
+        saveTerrain.addActionListener(this::actionPerformed);
+        saveTerrain.setEnabled(false);
         slider = new JSlider(JSlider.HORIZONTAL);
         slider.setMinimum(4);
         slider.setMaximum(25);
@@ -85,6 +91,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         buttonsPanel.add(resetButton);
         buttonsPanel.add(startButton);
         buttonsPanel.add(randomizeButton);
+        buttonsPanel.add(saveTerrain);
 //        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
         add(buttonsPanel);
     }
@@ -113,9 +120,10 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
             }
             case "createWindow": {
                 if (terrainFrame != null) terrainFrame.dispose();
-                terrainFrame = new TerrainFrame(localProperties, this);
+                terrainFrame = new TerrainFrame(localProperties, this, logger);
                 startButton.setEnabled(true);
                 randomizeButton.setEnabled(true);
+                saveTerrain.setEnabled(true);
                 break;
             }
             case "setXCount": {
@@ -140,6 +148,14 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
             }
             case "randomizeFire": {
                 terrainFrame.randomizeFire();
+                break;
+            }
+            case "saveTerrain": {
+                try {
+                    terrainFrame.saveTerrain("./Terrain.ser");
+                } catch (IOException e2) {
+                    logger.log(Level.SEVERE, e2.getMessage(), e2);
+                }
                 break;
             }
             default: {

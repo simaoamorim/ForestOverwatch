@@ -5,7 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class TerrainFrame extends JFrame {
     private static final Dimension frameSize = new Dimension(700,600);
@@ -16,10 +19,12 @@ public class TerrainFrame extends JFrame {
     public static Integer[] Sizes = TerrainGrid.Sizes;
     private Properties localProperties;
     private Settings settings;
+    private Logger logger;
 
-    public TerrainFrame(Properties localProperties, Settings settings) {
+    public TerrainFrame(Properties localProperties, Settings settings, Logger logger) {
         this.localProperties = localProperties;
         this.settings = settings;
+        this.logger = logger;
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -41,7 +46,7 @@ public class TerrainFrame extends JFrame {
 
     private void initUI() {
         setLayout(new BorderLayout());
-        terrainGrid = new TerrainGrid(Integer.parseInt(localProperties.getProperty("XCount")), Integer.parseInt(localProperties.getProperty("YCount")));
+        terrainGrid = new TerrainGrid(Integer.parseInt(localProperties.getProperty("XCount")), Integer.parseInt(localProperties.getProperty("YCount")), logger);
         terrainGrid.initialize();
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -71,6 +76,10 @@ public class TerrainFrame extends JFrame {
     void randomizeFire() {
         terrainGrid.randomizeFire();
         repaint();
+    }
+
+    void saveTerrain(String path) throws IOException {
+        terrainGrid.saveTerrain(path);
     }
 
 }
