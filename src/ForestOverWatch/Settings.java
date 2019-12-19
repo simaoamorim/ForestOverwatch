@@ -13,8 +13,10 @@ import java.util.logging.Logger;
 
 public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JComboBox<Integer> yCountChoice;
-    private JButton startButton;
+    private JButton newWindowButton;
     private JButton resetButton;
+    private JButton startButton;
+    private JButton randomizeButton;
     private JSlider slider;
     private TerrainFrame terrainFrame;
     private Properties localProperties = new Properties();
@@ -47,10 +49,20 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         resetButton.setActionCommand("reset");
         resetButton.addActionListener(this::actionPerformed);
         resetButton.setFocusable(false);
+        newWindowButton = new JButton("Create Window");
+        newWindowButton.setActionCommand("createWindow");
+        newWindowButton.addActionListener(this::actionPerformed);
+        newWindowButton.setFocusable(false);
         startButton = new JButton("Start");
         startButton.setActionCommand("start");
         startButton.addActionListener(this::actionPerformed);
         startButton.setFocusable(false);
+        startButton.setEnabled(false);
+        randomizeButton = new JButton("Randomize fire");
+        randomizeButton.setActionCommand("randomizeFire");
+        randomizeButton.addActionListener(this::actionPerformed);
+        randomizeButton.setFocusable(false);
+        randomizeButton.setEnabled(false);
         slider = new JSlider(JSlider.HORIZONTAL);
         slider.setMinimum(4);
         slider.setMaximum(25);
@@ -69,8 +81,10 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         buttonsPanel.add(slider);
 //        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
 //        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
-        buttonsPanel.add(startButton);
+        buttonsPanel.add(newWindowButton);
         buttonsPanel.add(resetButton);
+        buttonsPanel.add(startButton);
+        buttonsPanel.add(randomizeButton);
 //        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
         add(buttonsPanel);
     }
@@ -97,9 +111,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 pack(); // Resize the window to fit contents
                 break;
             }
-            case "start": {
+            case "createWindow": {
                 if (terrainFrame != null) terrainFrame.dispose();
                 terrainFrame = new TerrainFrame(localProperties, this);
+                startButton.setEnabled(true);
+                randomizeButton.setEnabled(true);
                 break;
             }
             case "setXCount": {
@@ -110,6 +126,20 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
             case "setYCount": {
                 localProperties.setProperty("YCount", Objects.requireNonNull(yCountChoice.getSelectedItem()).toString());
                 logger.config("YCount changed to "+localProperties.getProperty("YCount"));
+                break;
+            }
+            case "start": {
+                if (! terrainFrame.isRunning()) {
+                    terrainFrame.startIteration();
+                    startButton.setText("Stop");
+                } else {
+                    terrainFrame.stopIteration();
+                    startButton.setText("Start");
+                }
+                break;
+            }
+            case "randomizeFire": {
+                terrainFrame.randomizeFire();
                 break;
             }
             default: {

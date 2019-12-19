@@ -68,4 +68,9 @@ public class TerrainFrame extends JFrame {
 
     public void setYCount(int count) { terrainGrid.setYCount(count); }
 
+    void randomizeFire() {
+        terrainGrid.randomizeFire();
+        repaint();
+    }
+
 }
