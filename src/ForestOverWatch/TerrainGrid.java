@@ -75,7 +75,7 @@ class TerrainGrid extends JComponent {
     }
 
     void randomizeFire() {
-        int count = new Random().nextInt(10);
+        int count = new Random().nextInt(4)+1;
         for (int i = 0; i < count; i++) {
             int x = new Random().nextInt(XCount);
             int y = new Random().nextInt(YCount);
@@ -204,13 +204,13 @@ class TerrainGrid extends JComponent {
         int _height = (YCount * cellSize);
         this.setPreferredSize(new Dimension( (_width+(2*margin)), (_height+(2*margin))));
         g.setColor(Color.BLACK);
-        g.drawRect( margin, margin, _width, _height);
+        /*g.drawRect( margin, margin, _width, _height);
         for (int x = margin; x <= _width; x += cellSize) {
             g.drawLine(x, margin, x, (_height+margin));
         }
         for (int y = margin; y <= _height; y += cellSize) {
             g.drawLine(margin, y, (_width+margin), y);
-        }
+        }*/
     }
 
     void iteration() {

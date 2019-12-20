@@ -70,7 +70,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         saveTerrain.addActionListener(this::actionPerformed);
         saveTerrain.setEnabled(false);
         slider = new JSlider(JSlider.HORIZONTAL);
-        slider.setMinimum(4);
+        slider.setMinimum(1);
         slider.setMaximum(25);
         slider.setValue(10);
         slider.addChangeListener(this::zoomChosen);
