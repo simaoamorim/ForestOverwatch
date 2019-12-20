@@ -217,8 +217,8 @@ class TerrainGrid extends JComponent {
                     terrainPoints[x][y].fireSpreading();
             }
         }
-        revalidate();
-//        requestFocus();
+        repaint();
+        requestFocus();
     }
 
     void setCellSize(int size) {

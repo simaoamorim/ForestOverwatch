@@ -24,7 +24,7 @@ public class TerrainFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                settings.setVisible(true);
+                settings.terrainFrameClosed();
             }
         });
         setTitle("Forest Over-Watch - Terrain");
@@ -33,7 +33,7 @@ public class TerrainFrame extends JFrame {
         setMaximumSize(maxFrameSize);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setLocation(settings.getX()+settings.getWidth(), settings.getY());
-        setExtendedState(MAXIMIZED_BOTH);
+//        setExtendedState(MAXIMIZED_BOTH);
         initUI();
         pack();
         setVisible(true);

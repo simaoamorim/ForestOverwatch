@@ -108,9 +108,9 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 logger.fine("Application reset");
                 if (terrainFrame != null)
                     terrainFrame.dispose();
-                xCountChoice.setSelectedItem(50);
-                yCountChoice.setSelectedItem(50);
-                slider.setValue(10);
+                xCountChoice.setSelectedItem(Integer.parseInt(localProperties.getProperty("XCount")));
+                yCountChoice.setSelectedItem(Integer.parseInt(localProperties.getProperty("YCount")));
+                slider.setValue(Integer.parseInt(localProperties.getProperty("cellSize")));
                 pack(); // Resize the window to fit contents
                 break;
             }
@@ -173,7 +173,6 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         startButton.setText("Start");
         startButton.setEnabled(false);
         randomizeButton.setEnabled(false);
-
     }
 
 }
