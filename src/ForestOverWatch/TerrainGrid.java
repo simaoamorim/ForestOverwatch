@@ -2,34 +2,26 @@ package ForestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.Random;
-import java.util.logging.Logger;
 
 class TerrainGrid extends JComponent {
-    private int cellSize = 10;
+    private int cellSize;
     private static final int margin = 1;
     public static Integer[] Sizes = {50,100,200,500,1000};
     private int XCount;
     private int YCount;
     private boolean firstIteration = true;
     private TerrainPoint[][] terrainPoints;
-    private Logger logger;
+    private Dimension preferredSize = new Dimension();
 
-    TerrainGrid(int XCount, int YCount, Logger logger) {
+    TerrainGrid(int XCount, int YCount, int cellSize) {
         this.XCount = XCount;
         this.YCount = YCount;
-        this.logger = logger;
+        this.cellSize = cellSize;
         setFocusable(true);
-        this.setPreferredSize(
-                new Dimension(
-                        (XCount *cellSize)+(2*margin),
-                        (YCount *cellSize)+(2*margin)
-                )
-        );
+        preferredSize.height = (YCount *cellSize)+(2*margin);
+        preferredSize.width = (XCount *cellSize)+(2*margin);
+        setPreferredSize(preferredSize);
     }
 
     void initialize() {
@@ -202,7 +194,8 @@ class TerrainGrid extends JComponent {
         }
         int _width = (XCount * cellSize);
         int _height = (YCount * cellSize);
-        this.setPreferredSize(new Dimension( (_width+(2*margin)), (_height+(2*margin))));
+        preferredSize.width = (_width+(2*margin));
+        preferredSize.height = (_height+(2*margin));
         g.setColor(Color.BLACK);
         /*g.drawRect( margin, margin, _width, _height);
         for (int x = margin; x <= _width; x += cellSize) {
@@ -211,6 +204,7 @@ class TerrainGrid extends JComponent {
         for (int y = margin; y <= _height; y += cellSize) {
             g.drawLine(margin, y, (_width+margin), y);
         }*/
+        setPreferredSize(preferredSize);
     }
 
     void iteration() {
@@ -229,35 +223,21 @@ class TerrainGrid extends JComponent {
 
     void setCellSize(int size) {
         cellSize = size;
-        this.setPreferredSize(
-                new Dimension(
-                        (XCount *cellSize)+(2*margin),
-                        (YCount *cellSize)+(2*margin)
-                )
-        );
+        revalidate();
     }
 
     void setXCount(int count) {
         XCount = count;
-        repaint();
+        revalidate();
     }
 
     void setYCount(int count) {
         YCount = count;
-        repaint();
+        revalidate();
     }
 
     void reset() {
-        repaint();
+        revalidate();
         firstIteration = true;
-    }
-
-    void saveTerrain(String path) throws IOException {
-        FileOutputStream f = new FileOutputStream(path);
-        ObjectOutputStream o = new ObjectOutputStream(f);
-        o.writeObject(terrainPoints);
-        o.close();
-        f.close();
-        logger.info("terrainPoints saved to file \""+path+"\"");
     }
 }
