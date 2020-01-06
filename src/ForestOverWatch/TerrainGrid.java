@@ -2,26 +2,34 @@ package ForestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Random;
+import java.util.logging.Logger;
 
 class TerrainGrid extends JComponent {
-    private int cellSize;
+    private int cellSize = 10;
     private static final int margin = 1;
     public static Integer[] Sizes = {50,100,200,500,1000};
     private int XCount;
     private int YCount;
     private boolean firstIteration = true;
     private TerrainPoint[][] terrainPoints;
-    private Dimension preferredSize = new Dimension();
+    private Logger logger;
 
-    TerrainGrid(int XCount, int YCount, int cellSize) {
+    TerrainGrid(int XCount, int YCount, Logger logger) {
         this.XCount = XCount;
         this.YCount = YCount;
-        this.cellSize = cellSize;
+        this.logger = logger;
         setFocusable(true);
-        preferredSize.height = (YCount *cellSize)+(2*margin);
-        preferredSize.width = (XCount *cellSize)+(2*margin);
-        setPreferredSize(preferredSize);
+        this.setPreferredSize(
+                new Dimension(
+                        (XCount *cellSize)+(2*margin),
+                        (YCount *cellSize)+(2*margin)
+                )
+        );
     }
 
     void initialize() {
@@ -62,8 +70,110 @@ class TerrainGrid extends JComponent {
                 terrainPoints[x][y].setType(TerrainPoint.Types.getRandom());
             }
         }
-        System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
         softTerrain();
+
+        int auxX = XCount/50;
+        int auxY = YCount/50;
+        for(int x = 0; x < auxX; x++){
+            for(int y=0; y < auxY; y++){
+                if(((x+y)%3) == 0){
+                    for (int z = 0; z < 50; z++) {
+                        for (int w = 0; w < 50; w++){
+                            terrainPoints[z + x*50][w + y*50].setType(terrainPoints[z][w].getType());
+                        }
+                    }
+                } else if(((x+y)%4) == 0 && ((x+y)%2!=0)){
+                    for (int z = 0; z < 50; z++) {
+                        for (int w = 49; w >= 0; w--){
+                            terrainPoints[z + x*50][w + y*50].setType(terrainPoints[z][49-w].getType());
+                        }
+                    }
+                } else if(((x+y)%2)==0){
+                    for (int z = 49; z >= 0; z--) {
+                        for (int w = 0; w < 50; w++){
+                            terrainPoints[z + x*50][w + y*50].setType(terrainPoints[49-z][w].getType());
+                        }
+                    }
+                } else {
+                    for (int z = 49; z >= 0; z--) {
+                        for (int w = 49; w >= 0; w--){
+                            terrainPoints[z + x*50][w + y*50].setType(terrainPoints[49-z][49-w].getType());
+                        }
+                    }
+                }
+            }
+        }
+        for(int x = 0; x < XCount; x++){
+            for(int w = 0; w < auxX; w++) {
+                if((x == 49*w) || (x== 50*w)){
+                    for(int y = 0; y < YCount; y++) {
+                        int water = 0, tree = 0, ground = 0;
+                        for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
+                            switch (terrainPoints[x][y].neighbours.get(z).getType()) {
+                                case GROUND: ground++; break;
+                                case TREE: tree++; break;
+                                case WATER: water++; break;
+                            }
+                        }
+                        if((water < 3) && (terrainPoints[x][y].getType() == TerrainPoint.Types.WATER)){
+                            if(ground >= tree){
+                                terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
+                            } else{
+                                terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
+                            }
+                        } else if((tree < 3) && (terrainPoints[x][y].getType() == TerrainPoint.Types.TREE)){
+                            if(ground >= water){
+                                terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
+                            } else{
+                                terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
+                            }
+                        } else if((ground < 3) && (terrainPoints[x][y].getType() == TerrainPoint.Types.GROUND)){
+                            if(tree >= water){
+                                terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
+                            } else{
+                                terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for(int y = 0; y < YCount; y++){
+            for(int w = 0; w < auxY; w++) {
+                if((y == 49*w) || (y== 50*w)){
+                    for(int x = 0; x < XCount; x++) {
+                        int water = 0, tree = 0, ground = 0;
+                        for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
+                            switch (terrainPoints[x][y].neighbours.get(z).getType()) {
+                                case GROUND: ground++; break;
+                                case TREE: tree++; break;
+                                case WATER: water++; break;
+                            }
+                        }
+                        if((water < 3) && (terrainPoints[x][y].getType() == TerrainPoint.Types.WATER)){
+                            if(ground >= tree){
+                                terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
+                            } else{
+                                terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
+                            }
+                        } else if((tree < 3) && (terrainPoints[x][y].getType() == TerrainPoint.Types.TREE)){
+                            if(ground >= water){
+                                terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
+                            } else{
+                                terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
+                            }
+                        } else if((ground < 3) && (terrainPoints[x][y].getType() == TerrainPoint.Types.GROUND)){
+                            if(tree >= water){
+                                terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
+                            } else{
+                                terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
     }
 
     void randomizeFire() {
@@ -78,8 +188,8 @@ class TerrainGrid extends JComponent {
     }
 
     private void softTerrain(){
-        for (int x = 0; x < XCount; x++) {
-            for (int y = 0; y < YCount; y++) {
+        for (int x = 0; x < 50; x++) {
+            for (int y = 0; y < 50; y++) {
                 int water = 0, tree = 0, ground = 0;
                 for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
                     switch (terrainPoints[x][y].neighbours.get(z).getType()) {
@@ -92,14 +202,14 @@ class TerrainGrid extends JComponent {
                     terrainPoints[x][y].setType(TerrainPoint.Types.WATER);
                 } else if((tree > Math.max(water,ground))){
                     terrainPoints[x][y].setType(TerrainPoint.Types.TREE);
-                } else if((ground > Math.max(water,tree)) && (countTerrain(TerrainPoint.Types.GROUND) < XCount*YCount/2)){
+                } else if((ground > Math.max(water,tree)) && (countTerrain(TerrainPoint.Types.GROUND) < 125)){
                     terrainPoints[x][y].setType(TerrainPoint.Types.GROUND);
                 }
             }
         }
 
-        for (int x = 0; x < XCount; x++) {
-            for (int y = 0; y < YCount; y++) {
+        for (int x = 0; x < 50; x++) {
+            for (int y = 0; y < 50; y++) {
                 int water = 0, tree = 0, ground = 0;
                 for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
                     switch (terrainPoints[x][y].neighbours.get(z).getType()) {
@@ -129,8 +239,8 @@ class TerrainGrid extends JComponent {
                 }
             }
         }
-        for (int x = 0; x < XCount; x++) {
-            for (int y = 0; y < YCount; y++) {
+        for (int x = 0; x < 50; x++) {
+            for (int y = 0; y < 50; y++) {
                 int water = 0, tree = 0, ground = 0;
                 for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
                     switch (terrainPoints[x][y].neighbours.get(z).getType()) {
@@ -161,7 +271,6 @@ class TerrainGrid extends JComponent {
             }
         }
 
-        System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
     }
 
     private int countTerrain(TerrainPoint.Types terrain){
@@ -194,8 +303,7 @@ class TerrainGrid extends JComponent {
         }
         int _width = (XCount * cellSize);
         int _height = (YCount * cellSize);
-        preferredSize.width = (_width+(2*margin));
-        preferredSize.height = (_height+(2*margin));
+        this.setPreferredSize(new Dimension( (_width+(2*margin)), (_height+(2*margin))));
         g.setColor(Color.BLACK);
         /*g.drawRect( margin, margin, _width, _height);
         for (int x = margin; x <= _width; x += cellSize) {
@@ -204,7 +312,6 @@ class TerrainGrid extends JComponent {
         for (int y = margin; y <= _height; y += cellSize) {
             g.drawLine(margin, y, (_width+margin), y);
         }*/
-        setPreferredSize(preferredSize);
     }
 
     void iteration() {
@@ -223,21 +330,35 @@ class TerrainGrid extends JComponent {
 
     void setCellSize(int size) {
         cellSize = size;
-        revalidate();
+        this.setPreferredSize(
+                new Dimension(
+                        (XCount *cellSize)+(2*margin),
+                        (YCount *cellSize)+(2*margin)
+                )
+        );
     }
 
     void setXCount(int count) {
         XCount = count;
-        revalidate();
+        repaint();
     }
 
     void setYCount(int count) {
         YCount = count;
-        revalidate();
+        repaint();
     }
 
     void reset() {
-        revalidate();
+        repaint();
         firstIteration = true;
+    }
+
+    void saveTerrain(String path) throws IOException {
+        FileOutputStream f = new FileOutputStream(path);
+        ObjectOutputStream o = new ObjectOutputStream(f);
+        o.writeObject(terrainPoints);
+        o.close();
+        f.close();
+        logger.info("terrainPoints saved to file \""+path+"\"");
     }
 }
