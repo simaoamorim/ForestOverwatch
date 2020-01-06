@@ -42,10 +42,12 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         xCountChoice.setFocusable(false);
         xCountChoice.setActionCommand("setXCount");
         xCountChoice.addActionListener(this::actionPerformed);
+        xCountChoice.setSelectedItem(Integer.parseInt(localProperties.getProperty("XCount")));
         yCountChoice = new JComboBox<>(TerrainFrame.Sizes);
         yCountChoice.setFocusable(false);
         yCountChoice.setActionCommand("setYCount");
         yCountChoice.addActionListener(this::actionPerformed);
+        yCountChoice.setSelectedItem(Integer.parseInt(localProperties.getProperty("YCount")));
         resetButton = new JButton("Reset");
         resetButton.setActionCommand("reset");
         resetButton.addActionListener(this::actionPerformed);
@@ -72,7 +74,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         slider = new JSlider(JSlider.HORIZONTAL);
         slider.setMinimum(1);
         slider.setMaximum(25);
-        slider.setValue(10);
+        slider.setValue(Integer.parseInt(localProperties.getProperty("cellSize")));
         slider.addChangeListener(this::zoomChosen);
         slider.setFocusable(false);
         resetButton.setSize(100,60);
@@ -98,6 +100,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
 
     private void zoomChosen(ChangeEvent e) {
         int reqSize = slider.getValue();
+        localProperties.setProperty("cellSize", String.valueOf(reqSize));
         System.out.println(String.format("Setting zoom to %d", reqSize));
         terrainFrame.setCellSize(reqSize);
         terrainFrame.repaint();
@@ -112,9 +115,9 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 logger.fine("Application reset");
                 if (terrainFrame != null)
                     terrainFrame.dispose();
-                xCountChoice.setSelectedItem(50);
-                yCountChoice.setSelectedItem(50);
-                slider.setValue(10);
+                xCountChoice.setSelectedItem(Integer.parseInt(localProperties.getProperty("XCount")));
+                yCountChoice.setSelectedItem(Integer.parseInt(localProperties.getProperty("YCount")));
+                slider.setValue(Integer.parseInt(localProperties.getProperty("cellSize")));
                 pack(); // Resize the window to fit contents
                 break;
             }
@@ -180,6 +183,12 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         } catch (IOException e) {
             logger.warning("No user config file found: "+e.getMessage());
         }
+    }
+
+    void terrainFrameClosed() {
+        startButton.setText("Start");
+        startButton.setEnabled(false);
+        randomizeButton.setEnabled(false);
     }
 
 }
