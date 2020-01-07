@@ -3,6 +3,7 @@ package ForestOverWatch;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.security.InvalidParameterException;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -34,8 +35,11 @@ class TerrainGrid extends JComponent {
         for (int x = 0; x < XCount; x++)
             for (int y = 0; y < YCount; y++)
                 terrainPoints[x][y] = new TerrainPoint();
+        setNeighbourhood();
+    }
 
-//      Add neighbors, ignoring borders (Moore)
+    void setNeighbourhood() {
+        //      Add neighbors, ignoring borders (Moore)
         for (int x = 0; x < XCount; x++) {
             for (int y = 0; y < YCount; y++) {
                 if (y > 0)
@@ -61,6 +65,7 @@ class TerrainGrid extends JComponent {
     }
 
     void randomizeTerrain() {
+        initialize();
         for (int x = 0; x < XCount; x++) {
             for (int y = 0; y < YCount; y++) {
                 terrainPoints[x][y].setType(TerrainPoint.Types.getRandom());
@@ -286,23 +291,25 @@ class TerrainGrid extends JComponent {
         super.paintComponent(g);
         System.out.println(String.format("Cell size: %dx%d", cellSize, cellSize));
         System.out.printf("Cell Count: %dx%d\n", XCount, YCount);
-        for (int x = 0; x < XCount; x++) {
-            for (int y = 0; y < YCount; y++) {
-                switch (terrainPoints[x][y].getType()) {
-                    case GROUND: g.setColor(new Color(0xC77522)); break;
-                    case TREE: g.setColor(new Color( 0x00AA00)); break;
-                    case WATER: g.setColor(new Color(0x0066FF)); break;
-                    case FIRE: g.setColor(new Color(0xFF0000)); break;
-                    default: g.setColor(getBackground());
+        if (terrainPoints != null) {
+            for (int x = 0; x < XCount; x++) {
+                for (int y = 0; y < YCount; y++) {
+                    switch (terrainPoints[x][y].getType()) {
+                        case GROUND: g.setColor(new Color(0xC77522)); break;
+                        case TREE: g.setColor(new Color( 0x00AA00)); break;
+                        case WATER: g.setColor(new Color(0x0066FF)); break;
+                        case FIRE: g.setColor(new Color(0xFF0000)); break;
+                        default: g.setColor(getBackground());
+                    }
+                    g.fillRect(margin+(x*cellSize), margin+(y*cellSize), cellSize, cellSize);
                 }
-                g.fillRect(margin+(x*cellSize), margin+(y*cellSize), cellSize, cellSize);
             }
         }
         int _width = (XCount * cellSize);
         int _height = (YCount * cellSize);
         this.setPreferredSize(new Dimension( (_width+(2*margin)), (_height+(2*margin))));
-        g.setColor(Color.BLACK);
-        /*g.drawRect( margin, margin, _width, _height);
+        /*g.setColor(Color.BLACK);
+        g.drawRect( margin, margin, _width, _height);
         for (int x = margin; x <= _width; x += cellSize) {
             g.drawLine(x, margin, x, (_height+margin));
         }
@@ -370,6 +377,8 @@ class TerrainGrid extends JComponent {
         }
         o.close();
         f.close();
+        if (terrainPoints != null)
+            setNeighbourhood();
         repaint();
         logger.info("terrainPoint successfully loaded from file \""+path+"\"");
     }
