@@ -58,10 +58,9 @@ class TerrainGrid extends JComponent {
                 }
             }
         }
-        randomizeTerrain();
     }
 
-    private void randomizeTerrain() {
+    void randomizeTerrain() {
         for (int x = 0; x < XCount; x++) {
             for (int y = 0; y < YCount; y++) {
                 terrainPoints[x][y].setType(TerrainPoint.Types.getRandom());
@@ -171,6 +170,7 @@ class TerrainGrid extends JComponent {
             }
         }
         System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
+        repaint();
     }
 
     void randomizeFire() {
@@ -360,6 +360,7 @@ class TerrainGrid extends JComponent {
     }
 
     void loadTerrain(String path) throws IOException {
+        // TODO: may need to calculate neighbours after loading from file
         FileInputStream f = new FileInputStream(path);
         ObjectInputStream o = new ObjectInputStream(f);
         try {
@@ -369,7 +370,7 @@ class TerrainGrid extends JComponent {
         }
         o.close();
         f.close();
-        this.revalidate();
+        repaint();
         logger.info("terrainPoint successfully loaded from file \""+path+"\"");
     }
 }

@@ -75,7 +75,12 @@ public class TerrainFrame extends JFrame {
 
     void randomizeFire() {
         terrainGrid.randomizeFire();
-        repaint();
+        revalidate();
+    }
+
+    void randomizeTerrain() {
+        terrainGrid.randomizeTerrain();
+        revalidate();
     }
 
     void saveTerrain(String path) throws IOException {

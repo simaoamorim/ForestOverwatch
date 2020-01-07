@@ -5,7 +5,6 @@ import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.*;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -16,7 +15,8 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JButton newWindowButton;
     private JButton resetButton;
     private JButton startButton;
-    private JButton randomizeButton;
+    private JButton randomizeFireButton;
+    private JButton randomizeTerrainButton;
     private JButton saveTerrain;
     private JButton loadTerrain;
     private JFileChooser fileChooser = new JFileChooser(".");
@@ -63,11 +63,16 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         startButton.addActionListener(this::actionPerformed);
         startButton.setFocusable(false);
         startButton.setEnabled(false);
-        randomizeButton = new JButton("Randomize fire");
-        randomizeButton.setActionCommand("randomizeFire");
-        randomizeButton.addActionListener(this::actionPerformed);
-        randomizeButton.setFocusable(false);
-        randomizeButton.setEnabled(false);
+        randomizeFireButton = new JButton("Randomize fire");
+        randomizeFireButton.setActionCommand("randomizeFire");
+        randomizeFireButton.addActionListener(this::actionPerformed);
+        randomizeFireButton.setFocusable(false);
+        randomizeFireButton.setEnabled(false);
+        randomizeTerrainButton = new JButton("Randomize Terrain");
+        randomizeTerrainButton.setActionCommand("randomizeTerrain");
+        randomizeTerrainButton.addActionListener(this::actionPerformed);
+        randomizeTerrainButton.setFocusable(false);
+        randomizeTerrainButton.setEnabled(false);
         saveTerrain = new JButton("Save Terrain Layout");
         saveTerrain.setFocusable(false);
         saveTerrain.setActionCommand("saveTerrain");
@@ -99,7 +104,8 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         buttonsPanel.add(newWindowButton);
         buttonsPanel.add(resetButton);
         buttonsPanel.add(startButton);
-        buttonsPanel.add(randomizeButton);
+        buttonsPanel.add(randomizeFireButton);
+        buttonsPanel.add(randomizeTerrainButton);
         buttonsPanel.add(saveTerrain);
         buttonsPanel.add(loadTerrain);
 //        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
@@ -130,11 +136,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 break;
             }
             case "createWindow": {
-                // TODO: do not initialize random terrain, add option to do it later
                 if (terrainFrame != null) terrainFrame.dispose();
                 terrainFrame = new TerrainFrame(localProperties, this, logger);
                 startButton.setEnabled(true);
-                randomizeButton.setEnabled(true);
+                randomizeFireButton.setEnabled(true);
+                randomizeTerrainButton.setEnabled(true);
                 saveTerrain.setEnabled(true);
                 break;
             }
@@ -160,6 +166,10 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
             }
             case "randomizeFire": {
                 terrainFrame.randomizeFire();
+                break;
+            }
+            case "randomizeTerrain": {
+                terrainFrame.randomizeTerrain();
                 break;
             }
             case "saveTerrain": {
@@ -207,7 +217,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     void terrainFrameClosed() {
         startButton.setText("Start");
         startButton.setEnabled(false);
-        randomizeButton.setEnabled(false);
+        randomizeFireButton.setEnabled(false);
     }
 
 }
