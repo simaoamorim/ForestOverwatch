@@ -47,7 +47,6 @@ public class TerrainFrame extends JFrame {
     private void initUI() {
         setLayout(new BorderLayout());
         terrainGrid = new TerrainGrid(Integer.parseInt(localProperties.getProperty("XCount")), Integer.parseInt(localProperties.getProperty("YCount")), logger);
-        terrainGrid.initialize();
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel.add(terrainGrid);
@@ -75,11 +74,20 @@ public class TerrainFrame extends JFrame {
 
     void randomizeFire() {
         terrainGrid.randomizeFire();
-        repaint();
+        revalidate();
+    }
+
+    void randomizeTerrain() {
+        terrainGrid.randomizeTerrain();
+        revalidate();
     }
 
     void saveTerrain(String path) throws IOException {
         terrainGrid.saveTerrain(path);
+    }
+
+    void loadTerrain(String path) throws IOException {
+        terrainGrid.loadTerrain(path);
     }
 
 }

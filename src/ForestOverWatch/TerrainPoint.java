@@ -21,6 +21,8 @@ class TerrainPoint implements Serializable {
     }
 
     protected void addNeighbour(TerrainPoint neighbour) {
+        if (neighbours == null)
+            neighbours = new ArrayList<>();
         neighbours.add(neighbour);
     }
 
