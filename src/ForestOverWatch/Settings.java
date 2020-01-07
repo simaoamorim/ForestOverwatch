@@ -18,6 +18,8 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JButton startButton;
     private JButton randomizeButton;
     private JButton saveTerrain;
+    private JButton loadTerrain;
+    private JFileChooser fileChooser = new JFileChooser(".");
     private JSlider slider;
     private TerrainFrame terrainFrame;
     private Properties localProperties = new Properties();
@@ -71,6 +73,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         saveTerrain.setActionCommand("saveTerrain");
         saveTerrain.addActionListener(this::actionPerformed);
         saveTerrain.setEnabled(false);
+        loadTerrain = new JButton("Load terrain from file");
+        loadTerrain.setFocusable(false);
+        loadTerrain.setActionCommand("loadTerrain");
+        loadTerrain.addActionListener(this::actionPerformed);
+        loadTerrain.setEnabled(true);
         slider = new JSlider(JSlider.HORIZONTAL);
         slider.setMinimum(1);
         slider.setMaximum(25);
@@ -94,6 +101,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         buttonsPanel.add(startButton);
         buttonsPanel.add(randomizeButton);
         buttonsPanel.add(saveTerrain);
+        buttonsPanel.add(loadTerrain);
 //        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
         add(buttonsPanel);
     }
@@ -122,6 +130,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 break;
             }
             case "createWindow": {
+                // TODO: do not initialize random terrain, add option to do it later
                 if (terrainFrame != null) terrainFrame.dispose();
                 terrainFrame = new TerrainFrame(localProperties, this, logger);
                 startButton.setEnabled(true);
@@ -155,7 +164,17 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
             }
             case "saveTerrain": {
                 try {
-                    terrainFrame.saveTerrain("./Terrain.ser");
+                    fileChooser.showSaveDialog(this);
+                    terrainFrame.saveTerrain(fileChooser.getSelectedFile().getAbsolutePath());
+                } catch (IOException e2) {
+                    logger.log(Level.SEVERE, e2.getMessage(), e2);
+                }
+                break;
+            }
+            case "loadTerrain": {
+                try {
+                    fileChooser.showOpenDialog(this);
+                    terrainFrame.loadTerrain(fileChooser.getSelectedFile().getAbsolutePath());
                 } catch (IOException e2) {
                     logger.log(Level.SEVERE, e2.getMessage(), e2);
                 }

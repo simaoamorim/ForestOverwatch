@@ -82,4 +82,8 @@ public class TerrainFrame extends JFrame {
         terrainGrid.saveTerrain(path);
     }
 
+    void loadTerrain(String path) throws IOException {
+        terrainGrid.loadTerrain(path);
+    }
+
 }

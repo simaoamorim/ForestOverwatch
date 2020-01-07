@@ -2,10 +2,7 @@ package ForestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -360,5 +357,19 @@ class TerrainGrid extends JComponent {
         o.close();
         f.close();
         logger.info("terrainPoints saved to file \""+path+"\"");
+    }
+
+    void loadTerrain(String path) throws IOException {
+        FileInputStream f = new FileInputStream(path);
+        ObjectInputStream o = new ObjectInputStream(f);
+        try {
+            terrainPoints = (TerrainPoint[][]) o.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        o.close();
+        f.close();
+        this.revalidate();
+        logger.info("terrainPoint successfully loaded from file \""+path+"\"");
     }
 }
