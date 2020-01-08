@@ -14,7 +14,7 @@ class TerrainGrid extends JComponent {
     private int XCount;
     private int YCount;
     private boolean firstIteration = true;
-    private TerrainPoint[][] terrainPoints;
+    public TerrainPoint[][] terrainPoints;
     private Logger logger;
 
     TerrainGrid(int XCount, int YCount, Logger logger) {
