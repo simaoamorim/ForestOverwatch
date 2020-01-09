@@ -20,6 +20,7 @@ public class TerrainFrame extends JFrame {
     private Properties localProperties;
     private Settings settings;
     private Logger logger;
+    private Integer iterationCounter;
 
     public TerrainFrame(Properties localProperties, Settings settings, Logger logger) {
         this.localProperties = localProperties;
@@ -29,7 +30,7 @@ public class TerrainFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                settings.setVisible(true);
+                settings.terrainFrameClosed();
             }
         });
         setTitle("Forest Over-Watch - Terrain");
@@ -42,6 +43,7 @@ public class TerrainFrame extends JFrame {
         pack();
         setVisible(true);
         iterationTimer.stop();
+        iterationCounter = 0;
     }
 
     private void initUI() {
@@ -59,6 +61,8 @@ public class TerrainFrame extends JFrame {
 
     private void timerHandler(ActionEvent e) {
         terrainGrid.iteration();
+        iterationCounter++;
+        setTitle("Forest Over-Watch - Terrain (Iteration "+iterationCounter.toString()+")");
     }
 
     public boolean isRunning() { return iterationTimer.isRunning(); }
@@ -77,11 +81,13 @@ public class TerrainFrame extends JFrame {
 
     void randomizeFire() {
         terrainGrid.randomizeFire();
+        repaint();
         revalidate();
     }
 
     void randomizeTerrain() {
         terrainGrid.randomizeTerrain();
+        repaint();
         revalidate();
     }
 
