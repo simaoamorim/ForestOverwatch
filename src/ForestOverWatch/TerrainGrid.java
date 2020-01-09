@@ -3,12 +3,11 @@ package ForestOverWatch;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.security.InvalidParameterException;
 import java.util.Random;
 import java.util.logging.Logger;
 
 class TerrainGrid extends JComponent {
-    private int cellSize = 10;
+    private int cellSize;
     private static final int margin = 1;
     public static Integer[] Sizes = {50,100,200,500,1000};
     private int XCount;
@@ -17,9 +16,10 @@ class TerrainGrid extends JComponent {
     public TerrainPoint[][] terrainPoints;
     private Logger logger;
 
-    TerrainGrid(int XCount, int YCount, Logger logger) {
+    TerrainGrid(int XCount, int YCount, int cellSize, Logger logger) {
         this.XCount = XCount;
         this.YCount = YCount;
+        this.cellSize = cellSize;
         this.logger = logger;
         setFocusable(true);
         this.setPreferredSize(

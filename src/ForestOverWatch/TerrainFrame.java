@@ -46,7 +46,10 @@ public class TerrainFrame extends JFrame {
 
     private void initUI() {
         setLayout(new BorderLayout());
-        terrainGrid = new TerrainGrid(Integer.parseInt(localProperties.getProperty("XCount")), Integer.parseInt(localProperties.getProperty("YCount")), logger);
+        terrainGrid = new TerrainGrid(Integer.parseInt(localProperties.getProperty("XCount")),
+                Integer.parseInt(localProperties.getProperty("YCount")),
+                Integer.parseInt(localProperties.getProperty("cellSize")),
+                logger);
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel.add(terrainGrid);

@@ -116,9 +116,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         int reqSize = slider.getValue();
         localProperties.setProperty("cellSize", String.valueOf(reqSize));
         System.out.println(String.format("Setting zoom to %d", reqSize));
-        terrainFrame.setCellSize(reqSize);
-        terrainFrame.repaint();
-        terrainFrame.revalidate();
+        if (terrainFrame != null) {
+            terrainFrame.setCellSize(reqSize);
+            terrainFrame.repaint();
+            terrainFrame.revalidate();
+        }
         pack();
     }
 
