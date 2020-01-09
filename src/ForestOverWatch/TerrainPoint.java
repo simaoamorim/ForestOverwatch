@@ -48,12 +48,11 @@ class TerrainPoint implements Serializable {
             if(neighbours.get(i).getType() != Types.WATER){
                 if((i == 0) || (i == 1) || (i == 2) || (i == 5)) {//Von Neumann neighborhood
                         neighbours.get(i).FirePercentage = neighbours.get(i).FirePercentage + 2;
-                        fireCheck();
-                    }
+                }
                 else {
                     neighbours.get(i).FirePercentage = neighbours.get(i).FirePercentage + 1.43;
-                    fireCheck();
                 }
+                fireCheck();
             }
         }
     }

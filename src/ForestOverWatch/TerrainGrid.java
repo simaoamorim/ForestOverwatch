@@ -329,6 +329,7 @@ class TerrainGrid extends JComponent {
             }
         }
         repaint();
+        revalidate();
         requestFocus();
     }
 
@@ -367,7 +368,6 @@ class TerrainGrid extends JComponent {
     }
 
     void loadTerrain(String path) throws IOException {
-        // TODO: may need to calculate neighbours after loading from file
         FileInputStream f = new FileInputStream(path);
         ObjectInputStream o = new ObjectInputStream(f);
         try {

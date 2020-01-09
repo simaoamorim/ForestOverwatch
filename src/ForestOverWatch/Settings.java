@@ -82,7 +82,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         loadTerrain.setFocusable(false);
         loadTerrain.setActionCommand("loadTerrain");
         loadTerrain.addActionListener(this::actionPerformed);
-        loadTerrain.setEnabled(true);
+        loadTerrain.setEnabled(false);
         slider = new JSlider(JSlider.HORIZONTAL);
         slider.setMinimum(1);
         slider.setMaximum(25);
@@ -144,6 +144,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 randomizeFireButton.setEnabled(true);
                 randomizeTerrainButton.setEnabled(true);
                 saveTerrain.setEnabled(true);
+                loadTerrain.setEnabled(true);
                 break;
             }
             case "setXCount": {
@@ -220,6 +221,9 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         startButton.setText("Start");
         startButton.setEnabled(false);
         randomizeFireButton.setEnabled(false);
+        randomizeTerrainButton.setEnabled(false);
+        saveTerrain.setEnabled(false);
+        loadTerrain.setEnabled(false);
     }
 
 }
