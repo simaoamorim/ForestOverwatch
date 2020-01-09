@@ -52,7 +52,7 @@ class TerrainPoint implements Serializable {
                 else {
                     neighbours.get(i).FirePercentage = neighbours.get(i).FirePercentage + 1.43;
                 }
-                fireCheck();
+                neighbours.get(i).fireCheck();
             }
         }
     }
