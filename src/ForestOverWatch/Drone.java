@@ -7,7 +7,7 @@ public class Drone {
     public static Integer []types ={1,2,3};
     public int type;
     public int velocity;
-    TerrainPoint actualPosition;
+    MapPoint actualPosition;
 
     public Drone() {
         neighbours = new ArrayList<>();
@@ -22,8 +22,7 @@ public class Drone {
         }
     }
 
-
-    void scanSquare(TerrainPoint scannedSquare){
+    void scanSquare(MapPoint scannedSquare){
         scannedSquare.staticField=0;
     }
 
