@@ -9,7 +9,7 @@ class TerrainPoint implements Serializable {
     transient ArrayList<TerrainPoint> neighbours;
     private Types type;
     private double FirePercentage = 0;
-    private Point coordinates;
+    Point coordinates;
 
     enum Types {WATER,TREE,GROUND,FIRE;
         public static Types getRandom() {

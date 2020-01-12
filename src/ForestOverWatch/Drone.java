@@ -1,15 +1,19 @@
 package ForestOverWatch;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Drone {
     public static Integer []types ={1,2,3};
     public int type;
     public int velocity;
-    TerrainPoint actualPosition;
-    TerrainPoint[][] terrainPoint;
+    MapPoint actualPosition;
+    MapPoint[][] terrainPoint;
+    enum Orientation { Horizontal, Vertical}
+    private Orientation orientation;
 
-    Drone(TerrainPoint[][] terrain) {
+
+    Drone(MapPoint[][] terrain) {
         terrainPoint = terrain;
     }
 
@@ -22,21 +26,38 @@ public class Drone {
         }
     }
 
-
-    void scanSquare(TerrainPoint scannedSquare){
-//        scannedSquare.staticField=0;
+    void scanSquare(MapPoint scannedSquare){
+        scannedSquare.staticField=0;
     }
 
-    void move(){/*
+    void move(){
         float staticField_aux = 0;
-        int index_aux = 0;
-        for(int i = 0;i < neighbours.size(); i++){
-            if(actualPosition.neighbours.get(i).staticField >= staticField_aux){
-                staticField_aux = actualPosition.neighbours.get(i).staticField;
-                index_aux = i;
+        MapPoint aux = actualPosition;
+        int x_aux = actualPosition.coordinates.x;
+        int y_aux = actualPosition.coordinates.y;
+
+        for(int x = -1; x < 2; x++){
+            for( int y = -1; y < 2; y++){
+                if ((x == 0) ^ (y == 0)) {
+                    if(terrainPoint[x+x_aux][y+y_aux].staticField >= staticField_aux){
+                        staticField_aux = terrainPoint[x+x_aux][y+y_aux].staticField;
+                        aux = terrainPoint[x+x_aux][y+y_aux];
+                    }
+                }
             }
         }
-        actualPosition = actualPosition.neighbours.get(index_aux);*/
+        calculateOrientation(actualPosition,aux);
+        actualPosition = aux;
     }
+
+    void calculateOrientation(MapPoint actual, MapPoint next){
+        if((actual.coordinates.x - next.coordinates.x) == 0){
+           orientation = Orientation.Vertical;
+        } else {
+            orientation = Orientation.Horizontal;
+        }
+    }
+
+
 
 }
