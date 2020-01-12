@@ -42,7 +42,7 @@ public class Drone {
                         scanSquare(terrainPoint[x_aux][y_aux + y]);
                     }
                 }
-                ;
+
                 break;
             }
             case 3: {
@@ -53,7 +53,7 @@ public class Drone {
                         }
                     }
                 }
-                ;
+
                 break;
             }
         }
