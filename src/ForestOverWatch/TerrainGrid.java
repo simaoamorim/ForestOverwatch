@@ -377,8 +377,12 @@ class TerrainGrid extends JComponent {
         }
         o.close();
         f.close();
-        if (terrainPoints != null)
-            setNeighbourhood();
+        if (terrainPoints.length != XCount || terrainPoints[0].length != YCount) {
+            logger.warning("Loaded file does not match the configuration, aborting!");
+            terrainPoints = null;
+            return;
+        }
+        setNeighbourhood();
         repaint();
         logger.info("terrainPoint successfully loaded from file \""+path+"\"");
     }

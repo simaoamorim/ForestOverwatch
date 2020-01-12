@@ -134,6 +134,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 xCountChoice.setSelectedItem(Integer.parseInt(localProperties.getProperty("XCount")));
                 yCountChoice.setSelectedItem(Integer.parseInt(localProperties.getProperty("YCount")));
                 slider.setValue(Integer.parseInt(localProperties.getProperty("cellSize")));
+                terrainFrameClosed();
                 pack(); // Resize the window to fit contents
                 break;
             }
