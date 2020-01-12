@@ -26,6 +26,39 @@ public class Drone {
         }
     }
 
+    void scan(){
+        int x_aux = actualPosition.coordinates.x;
+        int y_aux = actualPosition.coordinates.y;
+
+        switch (this.type){
+            case 1: scanSquare(actualPosition); break;
+            case 2: {
+                if (orientation == Orientation.Vertical) {
+                    for (int x = -1; x < 2; x++) {
+                        scanSquare(terrainPoint[x_aux + x][y_aux]);
+                    }
+                } else {
+                    for (int y = -1; y < 2; y++) {
+                        scanSquare(terrainPoint[x_aux][y_aux + y]);
+                    }
+                }
+                ;
+                break;
+            }
+            case 3: {
+                for (int x = -1; x < 2; x++) {
+                    for (int y = -1; y < 2; y++) {
+                        if ((x == 0) || (y == 0)) {
+                            scanSquare(terrainPoint[x_aux + x][y_aux + y]);
+                        }
+                    }
+                }
+                ;
+                break;
+            }
+        }
+    }
+
     void scanSquare(MapPoint scannedSquare){
         scannedSquare.staticField=0;
     }

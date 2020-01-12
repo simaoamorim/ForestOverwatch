@@ -30,7 +30,7 @@ public class MapGrid extends JComponent {
         terrainPoints = new TerrainPoint[XCount][YCount];
         for (int x = 0; x < XCount; x++)
             for (int y = 0; y < YCount; y++)
-                terrainPoints[x][y] = new TerrainPoint();
+                terrainPoints[x][y] = new TerrainPoint(x,y);
     }
 
 }
