@@ -3,14 +3,14 @@ package ForestOverWatch;
 import java.util.ArrayList;
 
 public class Drone {
-    public ArrayList<TerrainPoint> neighbours;
     public static Integer []types ={1,2,3};
     public int type;
     public int velocity;
     TerrainPoint actualPosition;
+    TerrainPoint[][] terrainPoint;
 
-    public Drone() {
-        neighbours = new ArrayList<>();
+    Drone(TerrainPoint[][] terrain) {
+        terrainPoint = terrain;
     }
 
     void setType(int type) {
@@ -24,10 +24,10 @@ public class Drone {
 
 
     void scanSquare(TerrainPoint scannedSquare){
-        scannedSquare.staticField=0;
+//        scannedSquare.staticField=0;
     }
 
-    void move(){
+    void move(){/*
         float staticField_aux = 0;
         int index_aux = 0;
         for(int i = 0;i < neighbours.size(); i++){
@@ -36,12 +36,7 @@ public class Drone {
                 index_aux = i;
             }
         }
-        actualPosition = actualPosition.neighbours.get(index_aux);
+        actualPosition = actualPosition.neighbours.get(index_aux);*/
     }
 
-    protected void addNeighbour(TerrainPoint neighbour) {
-        if (neighbours == null)
-            neighbours = new ArrayList<>();
-        neighbours.add(neighbour);
-    }
 }
