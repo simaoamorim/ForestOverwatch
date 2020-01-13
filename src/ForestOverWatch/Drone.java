@@ -63,6 +63,7 @@ public class Drone {
 
     void scanSquare(MapPoint scannedSquare){
         scannedSquare.staticField=0;
+        scannedSquare.scanned = true; //Use this to show the points in the MapGrid
     }
 
     void move(){
