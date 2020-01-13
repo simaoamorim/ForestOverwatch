@@ -15,7 +15,7 @@ public class MapPoint extends TerrainPoint {
             staticField += 1.55;
         } else if(this.getType() == Types.FIRE){
             for (MapPoint neighbour : neighbours) {
-                if ((neighbour.getType() == Types.TREE) || (neighbour.getType() == Types.GROUND))
+                if ((neighbour.getType() != Types.WATER) || !(scanned)) //Verify if it works better
                     neighbour.staticField += 1.55;
             }
         }
