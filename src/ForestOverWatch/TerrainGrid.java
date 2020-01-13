@@ -10,8 +10,8 @@ class TerrainGrid extends JComponent {
     private int cellSize;
     private static final int margin = 1;
     public static Integer[] Sizes = {50,100,200,500,1000};
-    private int XCount;
-    private int YCount;
+    int XCount;
+    int YCount;
     private boolean firstIteration = true;
     public TerrainPoint[][] terrainPoints;
     private Logger logger;
