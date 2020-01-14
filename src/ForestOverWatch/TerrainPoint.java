@@ -10,7 +10,6 @@ class TerrainPoint implements Serializable {
     private Types type;
     private double FirePercentage = 0;
     Point coordinates;
-    boolean scanned;
 
     enum Types {WATER,TREE,GROUND,FIRE;
         public static Types getRandom() {

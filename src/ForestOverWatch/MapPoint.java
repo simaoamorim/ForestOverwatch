@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class MapPoint extends TerrainPoint {
     transient ArrayList<MapPoint> neighbours;
     public float staticField = 0;
+    boolean scanned;
 
     MapPoint(Integer x, Integer y) {
         super(x, y);
