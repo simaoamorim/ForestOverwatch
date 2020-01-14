@@ -75,7 +75,7 @@ public class Drone {
         for(int x = -1; x < 2; x++){
             for( int y = -1; y < 2; y++){
                 if ((x == 0) ^ (y == 0)) {
-                    if (((x_aux+x) != -1) || ((x_aux+x) != (terrainGrid.XCount+1)) || ((y_aux+y) != -1) || ((y_aux+y) != (terrainGrid.YCount+1))){ //Check if this works
+                    if (((x_aux+x) != -1) && ((x_aux+x) != (terrainGrid.XCount+1)) && ((y_aux+y) != -1) && ((y_aux+y) != (terrainGrid.YCount+1))){ //Check if this works
                         if(terrainPoint[x+x_aux][y+y_aux].staticField >= staticField_aux){
                             staticField_aux = terrainPoint[x+x_aux][y+y_aux].staticField;
                             aux = terrainPoint[x+x_aux][y+y_aux];
