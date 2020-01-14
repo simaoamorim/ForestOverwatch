@@ -1,7 +1,6 @@
 package ForestOverWatch;
 
-import java.awt.*;
-import java.util.ArrayList;
+import java.util.Properties;
 
 public class Drone {
     public static Integer []types ={1,2,3};
@@ -9,14 +8,17 @@ public class Drone {
     public int velocity;
     MapPoint actualPosition;
     MapPoint[][] terrainPoint;
-    TerrainGrid terrainGrid;
     enum Orientation { Horizontal, Vertical}
     private Orientation orientation;
+    private Integer XCount;
+    private Integer YCount;
 
 
-    Drone(MapPoint[][] terrain, TerrainGrid terrainGrid) {
+    Drone(MapPoint[][] terrain, Properties properties) {
         terrainPoint = terrain;
-        this.terrainGrid = terrainGrid;
+        XCount = Integer.parseInt(properties.getProperty("XCount"));
+        YCount = Integer.parseInt(properties.getProperty("YCount"));
+
     }
 
     void setType(int type) {
@@ -75,7 +77,8 @@ public class Drone {
         for(int x = -1; x < 2; x++){
             for( int y = -1; y < 2; y++){
                 if ((x == 0) ^ (y == 0)) {
-                    if (((x_aux+x) != -1) && ((x_aux+x) != (terrainGrid.XCount+1)) && ((y_aux+y) != -1) && ((y_aux+y) != (terrainGrid.YCount+1))){ //Check if this works
+                    if (((x_aux+x) != -1) && ((x_aux+x) != (XCount)) &&
+                            ((y_aux+y) != -1) && ((y_aux+y) != (YCount))){
                         if(terrainPoint[x+x_aux][y+y_aux].staticField >= staticField_aux){
                             staticField_aux = terrainPoint[x+x_aux][y+y_aux].staticField;
                             aux = terrainPoint[x+x_aux][y+y_aux];
