@@ -10,7 +10,7 @@ public class MapGrid extends JComponent {
     public static Integer[] Sizes = {50,100,200,500,1000};
     private int XCount;
     private int YCount;
-    private TerrainPoint[][] terrainPoints;
+    private MapPoint[][] mapPoints;
     private Logger logger;
 
     MapGrid(int XCount, int YCount, int cellSIze, Logger logger) {
@@ -27,10 +27,10 @@ public class MapGrid extends JComponent {
     }
 
     void initialize() {
-        terrainPoints = new TerrainPoint[XCount][YCount];
+        mapPoints = new MapPoint[XCount][YCount];
         for (int x = 0; x < XCount; x++)
             for (int y = 0; y < YCount; y++)
-                terrainPoints[x][y] = new TerrainPoint(x,y);
+                mapPoints[x][y] = new MapPoint(x,y);
     }
 
 }

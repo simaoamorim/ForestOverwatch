@@ -22,6 +22,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JFileChooser fileChooser = new JFileChooser(".");
     private JSlider slider;
     private TerrainFrame terrainFrame;
+    private MapFrame mapFrame;
     private Properties localProperties = new Properties();
     private Logger logger;
 
@@ -141,6 +142,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
             case "createWindow": {
                 if (terrainFrame != null) terrainFrame.dispose();
                 terrainFrame = new TerrainFrame(localProperties, this, logger);
+                mapFrame = new MapFrame(localProperties, this, logger);
                 startButton.setEnabled(true);
                 randomizeFireButton.setEnabled(true);
                 randomizeTerrainButton.setEnabled(true);
@@ -225,6 +227,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         randomizeTerrainButton.setEnabled(false);
         saveTerrain.setEnabled(false);
         loadTerrain.setEnabled(false);
+        mapFrame.dispose();
+    }
+
+    void mapFrameClosed() {
+        terrainFrame.dispose();
     }
 
 }
