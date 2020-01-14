@@ -10,6 +10,7 @@ class TerrainPoint implements Serializable {
     private Types type;
     private double FirePercentage = 0;
     Point coordinates;
+    boolean fireLocked = false;
 
     enum Types {WATER,TREE,GROUND,FIRE;
         public static Types getRandom() {
@@ -36,7 +37,7 @@ class TerrainPoint implements Serializable {
 
     void fireSpreading(){
         for(int i = 0; i < neighbours.size(); i++){
-            if(neighbours.get(i).getType() != Types.WATER){
+            if(neighbours.get(i).getType() != Types.WATER && neighbours.get(i).getType() != Types.FIRE) {
                 if((i == 0) || (i == 1) || (i == 2) || (i == 5)) {//Von Neumann neighborhood
                         neighbours.get(i).FirePercentage = neighbours.get(i).FirePercentage + 2;
                 }
@@ -55,6 +56,17 @@ class TerrainPoint implements Serializable {
 
     Types getType() {
         return type;
+    }
+
+    boolean fireSpreadingCondition() {
+        if (type != Types.FIRE)
+            return false;
+        for (TerrainPoint neighbour: neighbours) {
+            if (neighbour.getType() != Types.WATER && neighbour.getType() != Types.FIRE)
+                return true;
+        }
+        fireLocked = true;
+        return false;
     }
 
 }

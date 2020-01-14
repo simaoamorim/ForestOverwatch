@@ -17,7 +17,7 @@ public class Launcher implements Runnable {
     public void run() {
         consoleHandler.setLevel(Level.FINE);
         logger.setUseParentHandlers(false);
-        logger.setLevel(Level.FINE);
+        logger.setLevel(Level.WARNING);
         logger.addHandler(consoleHandler);
         new Settings(logger);
         logger.fine("Settings window created");

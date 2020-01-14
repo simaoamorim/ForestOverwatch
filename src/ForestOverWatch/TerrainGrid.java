@@ -174,7 +174,10 @@ class TerrainGrid extends JComponent {
                 }
             }
         }
-        System.out.printf("water %d tree %d ground %d\n", countTerrain(TerrainPoint.Types.WATER), countTerrain(TerrainPoint.Types.TREE), countTerrain(TerrainPoint.Types.GROUND));
+        logger.info(String.format("water %d tree %d ground %d\n",
+                countTerrain(TerrainPoint.Types.WATER),
+                countTerrain(TerrainPoint.Types.TREE),
+                countTerrain(TerrainPoint.Types.GROUND)));
         repaint();
     }
 
@@ -289,8 +292,8 @@ class TerrainGrid extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        System.out.println(String.format("Cell size: %dx%d", cellSize, cellSize));
-        System.out.printf("Cell Count: %dx%d\n", XCount, YCount);
+        logger.info(String.format("Cell size: %dx%d", cellSize, cellSize));
+        logger.info(String.format("Cell Count: %dx%d\n", XCount, YCount));
         if (terrainPoints != null) {
             for (int x = 0; x < XCount; x++) {
                 for (int y = 0; y < YCount; y++) {
@@ -308,14 +311,6 @@ class TerrainGrid extends JComponent {
         int _width = (XCount * cellSize);
         int _height = (YCount * cellSize);
         this.setPreferredSize(new Dimension( (_width+(2*margin)), (_height+(2*margin))));
-        /*g.setColor(Color.BLACK);
-        g.drawRect( margin, margin, _width, _height);
-        for (int x = margin; x <= _width; x += cellSize) {
-            g.drawLine(x, margin, x, (_height+margin));
-        }
-        for (int y = margin; y <= _height; y += cellSize) {
-            g.drawLine(margin, y, (_width+margin), y);
-        }*/
     }
 
     void iteration() {
@@ -324,7 +319,7 @@ class TerrainGrid extends JComponent {
         }
         for (int x = 0; x < XCount; x++) {
             for (int y = 0; y < YCount; y++) {
-                if (terrainPoints[x][y].getType() == TerrainPoint.Types.FIRE)
+                if (!terrainPoints[x][y].fireLocked && terrainPoints[x][y].fireSpreadingCondition())
                     terrainPoints[x][y].fireSpreading();
             }
         }
