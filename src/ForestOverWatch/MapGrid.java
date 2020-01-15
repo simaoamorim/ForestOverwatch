@@ -30,6 +30,33 @@ public class MapGrid extends JComponent {
         for (int x = 0; x < XCount; x++)
             for (int y = 0; y < YCount; y++)
                 mapPoints[x][y] = new MapPoint(x,y);
+        setNeighbourhood();
+    }
+
+    private void setNeighbourhood() {
+        //      Add neighbors, ignoring borders (Moore)
+        for (int x = 0; x < XCount; x++) {
+            for (int y = 0; y < YCount; y++) {
+                if (y > 0)
+                    mapPoints[x][y].addNeighbour(mapPoints[x][y - 1]); //Von Neumann neighborhood
+                if (y < YCount - 1)
+                    mapPoints[x][y].addNeighbour(mapPoints[x][y + 1]); //Von Neumann neighborhood
+                if (x > 0) {
+                    mapPoints[x][y].addNeighbour(mapPoints[x - 1][y]); //Von Neumann neighborhood
+                    if (y > 0)
+                        mapPoints[x][y].addNeighbour(mapPoints[x - 1][y - 1]);
+                    if (y < YCount - 1)
+                        mapPoints[x][y].addNeighbour(mapPoints[x - 1][y + 1]);
+                }
+                if (x < XCount - 1) {
+                    mapPoints[x][y].addNeighbour(mapPoints[x + 1][y]); //Von Neumann neighborhood
+                    if (y > 0)
+                        mapPoints[x][y].addNeighbour(mapPoints[x + 1][y - 1]);
+                    if (y < YCount - 1)
+                        mapPoints[x][y].addNeighbour(mapPoints[x + 1][y + 1]);
+                }
+            }
+        }
     }
 
 }
