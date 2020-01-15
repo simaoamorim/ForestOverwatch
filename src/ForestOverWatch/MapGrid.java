@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 public class MapGrid extends JComponent {
     private int cellSize;
     private static final int margin = 1;
-    public static Integer[] Sizes = {50,100,200,500,1000};
     private int XCount;
     private int YCount;
     private MapPoint[][] mapPoints;

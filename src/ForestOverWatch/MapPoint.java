@@ -3,9 +3,9 @@ package ForestOverWatch;
 import java.util.ArrayList;
 
 public class MapPoint extends TerrainPoint {
-    transient ArrayList<MapPoint> neighbours;
-    public float staticField = 0;
-    boolean scanned;
+    private transient ArrayList<MapPoint> neighbours;
+    private float staticField = 0;
+    private boolean scanned;
 
     MapPoint(Integer x, Integer y) {
         super(x, y);
@@ -20,5 +20,23 @@ public class MapPoint extends TerrainPoint {
                     neighbour.staticField += 1.55;
             }
         }
+    }
+
+    public void addNeighbour(MapPoint neighbour) {
+        if (neighbours == null)
+            neighbours = new ArrayList<>();
+        neighbours.add(neighbour);
+    }
+
+    public void setScanned(boolean scanned) {
+        this.scanned = scanned;
+    }
+
+    public float getStaticField() {
+        return staticField;
+    }
+
+    public void setStaticField(float staticField) {
+        this.staticField = staticField;
     }
 }

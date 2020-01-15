@@ -6,13 +6,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 class TerrainPoint implements Serializable {
-    transient ArrayList<TerrainPoint> neighbours;
+    private transient ArrayList<TerrainPoint> neighbours;
     private Types type;
     private double FirePercentage = 0;
-    Point coordinates;
-    boolean fireLocked = false;
-
-    enum Types {WATER,TREE,GROUND,FIRE;
+    private Point coordinates;
+    private boolean fireLocked = false;
+    public enum Types {WATER,TREE,GROUND,FIRE;
         public static Types getRandom() {
             int choice = new Random().nextInt(4);
             if (choice == 3) choice = 2;
@@ -20,19 +19,23 @@ class TerrainPoint implements Serializable {
         }
     }
 
-    TerrainPoint(Integer x, Integer y) {
+    public TerrainPoint(Integer x, Integer y) {
         neighbours = new ArrayList<>();
         coordinates = new Point(x, y);
     }
 
-    protected void addNeighbour(TerrainPoint neighbour) {
+    public void addNeighbour(TerrainPoint neighbour) {
         if (neighbours == null)
             neighbours = new ArrayList<>();
         neighbours.add(neighbour);
     }
 
-    void setType(Types type) {
+    public void setType(Types type) {
         this.type = type;
+    }
+
+    public void setTypeFrom(TerrainPoint extPoint) {
+        this.type = extPoint.getType();
     }
 
     void fireSpreading(){
@@ -49,16 +52,16 @@ class TerrainPoint implements Serializable {
         }
     }
 
-    void fireCheck(){
+    private void fireCheck(){
         if(FirePercentage >= 100)
             setType(Types.FIRE);
     }
 
-    Types getType() {
+    public Types getType() {
         return type;
     }
 
-    boolean fireSpreadingCondition() {
+    public boolean fireSpreadingCondition() {
         if (type != Types.FIRE)
             return false;
         for (TerrainPoint neighbour: neighbours) {
@@ -69,4 +72,23 @@ class TerrainPoint implements Serializable {
         return false;
     }
 
+    public ArrayList<TerrainPoint> getNeighbours() {
+        return neighbours;
+    }
+
+    public Integer getXCoordinate() {
+        return coordinates.x;
+    }
+
+    public Integer getYCoordinate() {
+        return coordinates.y;
+    }
+
+    public boolean isFireLocked() {
+        return fireLocked;
+    }
+
+    public TerrainPoint getNeighbourByIndex(Integer index) {
+        return neighbours.get(index);
+    }
 }

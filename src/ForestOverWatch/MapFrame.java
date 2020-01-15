@@ -1,14 +1,11 @@
 package ForestOverWatch;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class MapFrame extends JFrame {
-    private static final Dimension frameSize = new Dimension(700,600);
+public class MapFrame extends BaseGridFrame {
     private Integer XCount;
     private Integer YCount;
     private Integer CellSize;
@@ -19,6 +16,7 @@ public class MapFrame extends JFrame {
 
 
     public MapFrame(Properties properties, Settings settings, Logger logger) {
+        super();
         localProperties = properties;
         settingsWindow = settings;
         XCount = Integer.parseInt(localProperties.getProperty("XCount"));
@@ -26,6 +24,7 @@ public class MapFrame extends JFrame {
         CellSize = Integer.parseInt(localProperties.getProperty("cellSize"));
         this.logger = logger;
         mapGrid = new MapGrid(XCount, YCount, CellSize, this.logger);
+        mapGrid.initialize();
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -33,11 +32,7 @@ public class MapFrame extends JFrame {
                 settings.mapFrameClosed();
             }
         });
-        setDefaultCloseOperation(HIDE_ON_CLOSE);
         setLocation(settings.getX()+settings.getWidth()+50, settings.getY()+50);
         setTitle("Forest Over-Watch - Map");
-        setPreferredSize(frameSize);
-        setMinimumSize(frameSize);
-        setVisible(true);
     }
 }

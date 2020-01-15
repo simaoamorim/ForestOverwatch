@@ -80,25 +80,25 @@ class TerrainGrid extends JComponent {
                 if(((x+y)%3) == 0){
                     for (int z = 0; z < 50; z++) {
                         for (int w = 0; w < 50; w++){
-                            terrainPoints[z + x*50][w + y*50].setType(terrainPoints[z][w].getType());
+                            terrainPoints[z + x*50][w + y*50].setTypeFrom(terrainPoints[z][w]);
                         }
                     }
                 } else if(((x+y)%4) == 0 && ((x+y)%2!=0)){
                     for (int z = 0; z < 50; z++) {
                         for (int w = 49; w >= 0; w--){
-                            terrainPoints[z + x*50][w + y*50].setType(terrainPoints[z][49-w].getType());
+                            terrainPoints[z + x*50][w + y*50].setTypeFrom(terrainPoints[z][49-w]);
                         }
                     }
                 } else if(((x+y)%2)==0){
                     for (int z = 49; z >= 0; z--) {
                         for (int w = 0; w < 50; w++){
-                            terrainPoints[z + x*50][w + y*50].setType(terrainPoints[49-z][w].getType());
+                            terrainPoints[z + x*50][w + y*50].setTypeFrom(terrainPoints[49-z][w]);
                         }
                     }
                 } else {
                     for (int z = 49; z >= 0; z--) {
                         for (int w = 49; w >= 0; w--){
-                            terrainPoints[z + x*50][w + y*50].setType(terrainPoints[49-z][49-w].getType());
+                            terrainPoints[z + x*50][w + y*50].setTypeFrom(terrainPoints[49-z][49-w]);
                         }
                     }
                 }
@@ -109,8 +109,8 @@ class TerrainGrid extends JComponent {
                 if((x == 49*w) || (x== 50*w)){
                     for(int y = 0; y < YCount; y++) {
                         int water = 0, tree = 0, ground = 0;
-                        for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
-                            switch (terrainPoints[x][y].neighbours.get(z).getType()) {
+                        for(int z = 0; z < terrainPoints[x][y].getNeighbours().size(); ++z) {
+                            switch (terrainPoints[x][y].getNeighbourByIndex(z).getType()) {
                                 case GROUND: ground++; break;
                                 case TREE: tree++; break;
                                 case WATER: water++; break;
@@ -144,8 +144,8 @@ class TerrainGrid extends JComponent {
                 if((y == 49*w) || (y== 50*w)){
                     for(int x = 0; x < XCount; x++) {
                         int water = 0, tree = 0, ground = 0;
-                        for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
-                            switch (terrainPoints[x][y].neighbours.get(z).getType()) {
+                        for(int z = 0; z < terrainPoints[x][y].getNeighbours().size(); ++z) {
+                            switch (terrainPoints[x][y].getNeighbourByIndex(z).getType()) {
                                 case GROUND: ground++; break;
                                 case TREE: tree++; break;
                                 case WATER: water++; break;
@@ -196,8 +196,8 @@ class TerrainGrid extends JComponent {
         for (int x = 0; x < 50; x++) {
             for (int y = 0; y < 50; y++) {
                 int water = 0, tree = 0, ground = 0;
-                for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
-                    switch (terrainPoints[x][y].neighbours.get(z).getType()) {
+                for(int z = 0; z < terrainPoints[x][y].getNeighbours().size(); ++z) {
+                    switch (terrainPoints[x][y].getNeighbourByIndex(z).getType()) {
                         case GROUND: ground++; break;
                         case TREE: tree++; break;
                         case WATER: water++; break;
@@ -216,8 +216,8 @@ class TerrainGrid extends JComponent {
         for (int x = 0; x < 50; x++) {
             for (int y = 0; y < 50; y++) {
                 int water = 0, tree = 0, ground = 0;
-                for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
-                    switch (terrainPoints[x][y].neighbours.get(z).getType()) {
+                for(int z = 0; z < terrainPoints[x][y].getNeighbours().size(); ++z) {
+                    switch (terrainPoints[x][y].getNeighbourByIndex(z).getType()) {
                         case GROUND: ground++; break;
                         case TREE: tree++; break;
                         case WATER: water++; break;
@@ -247,8 +247,8 @@ class TerrainGrid extends JComponent {
         for (int x = 0; x < 50; x++) {
             for (int y = 0; y < 50; y++) {
                 int water = 0, tree = 0, ground = 0;
-                for(int z = 0; z < terrainPoints[x][y].neighbours.size(); ++z) {
-                    switch (terrainPoints[x][y].neighbours.get(z).getType()) {
+                for(int z = 0; z < terrainPoints[x][y].getNeighbours().size(); ++z) {
+                    switch (terrainPoints[x][y].getNeighbourByIndex(z).getType()) {
                         case GROUND: ground++; break;
                         case TREE: tree++; break;
                         case WATER: water++; break;
@@ -298,7 +298,7 @@ class TerrainGrid extends JComponent {
             for (int x = 0; x < XCount; x++) {
                 for (int y = 0; y < YCount; y++) {
                     switch (terrainPoints[x][y].getType()) {
-                        case GROUND: g.setColor(new Color(0xC77522)); break;
+                        case GROUND: g.setColor(new Color(0x7B4716)); break;
                         case TREE: g.setColor(new Color( 0x00AA00)); break;
                         case WATER: g.setColor(new Color(0x0066FF)); break;
                         case FIRE: g.setColor(new Color(0xFF0000)); break;
@@ -319,7 +319,7 @@ class TerrainGrid extends JComponent {
         }
         for (int x = 0; x < XCount; x++) {
             for (int y = 0; y < YCount; y++) {
-                if (!terrainPoints[x][y].fireLocked && terrainPoints[x][y].fireSpreadingCondition())
+                if (!terrainPoints[x][y].isFireLocked() && terrainPoints[x][y].fireSpreadingCondition())
                     terrainPoints[x][y].fireSpreading();
             }
         }
@@ -336,21 +336,6 @@ class TerrainGrid extends JComponent {
                         (YCount *cellSize)+(2*margin)
                 )
         );
-    }
-
-    void setXCount(int count) {
-        XCount = count;
-        repaint();
-    }
-
-    void setYCount(int count) {
-        YCount = count;
-        repaint();
-    }
-
-    void reset() {
-        repaint();
-        firstIteration = true;
     }
 
     void saveTerrain(String path) throws IOException {
