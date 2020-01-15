@@ -187,7 +187,10 @@ class TerrainGrid extends JComponent {
             int x = new Random().nextInt(XCount);
             int y = new Random().nextInt(YCount);
             TerrainPoint.Types type = terrainPoints[x][y].getType();
-            if (type == TerrainPoint.Types.GROUND || type == TerrainPoint.Types.TREE)
+
+            if (type == TerrainPoint.Types.WATER)
+                i--;
+            else if (type == TerrainPoint.Types.GROUND || type == TerrainPoint.Types.TREE)
                 terrainPoints[x][y].setType(TerrainPoint.Types.FIRE);
         }
     }
