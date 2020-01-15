@@ -34,11 +34,13 @@ public class Drone {
             case 2: {
                 if (orientation == Orientation.Vertical) {
                     for (int x = -1; x < 2; x++) {
-                        scanSquare(mapPoints[x_aux + x][y_aux]);
+                        if (((x_aux+x) != -1) && ((x_aux+x) != (XCount)))
+                            scanSquare(mapPoints[x_aux + x][y_aux]);
                     }
                 } else {
                     for (int y = -1; y < 2; y++) {
-                        scanSquare(mapPoints[x_aux][y_aux + y]);
+                        if (((y_aux+y) != -1) && ((y_aux+y) != (YCount)))
+                            scanSquare(mapPoints[x_aux][y_aux + y]);
                     }
                 }
                 break;
@@ -46,8 +48,11 @@ public class Drone {
             case 3: {
                 for (int x = -1; x < 2; x++) {
                     for (int y = -1; y < 2; y++) {
-                        if ((x == 0) || (y == 0)) {
-                            scanSquare(mapPoints[x_aux + x][y_aux + y]);
+                        if (((x_aux+x) != -1) && ((x_aux+x) != (XCount)) &&
+                                ((y_aux+y) != -1) && ((y_aux+y) != (YCount))) {
+                            if ((x == 0) || (y == 0)) {
+                                scanSquare(mapPoints[x_aux + x][y_aux + y]);
+                            }
                         }
                     }
                 }
