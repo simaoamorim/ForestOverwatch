@@ -4,7 +4,9 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -12,8 +14,6 @@ import java.util.logging.Logger;
 
 public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JComboBox<Integer> yCountChoice;
-    private JButton newWindowButton;
-    private JButton resetButton;
     private JButton startButton;
     private JButton randomizeFireButton;
     private JButton randomizeTerrainButton;
@@ -22,8 +22,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JFileChooser fileChooser = new JFileChooser(".");
     private JSlider slider;
     private TerrainFrame terrainFrame;
+    private MapFrame mapFrame;
     private Properties localProperties = new Properties();
     private Logger logger;
+    private Timer iterationTimer = new Timer(timeStep, this::timerHandler);
+    private static final int timeStep = 12; // Time in ms (1000/80 = 12.5)
 
     Settings(Logger logger) {
         this.logger = logger;
@@ -50,11 +53,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         yCountChoice.setActionCommand("setYCount");
         yCountChoice.addActionListener(this::actionPerformed);
         yCountChoice.setSelectedItem(Integer.parseInt(localProperties.getProperty("YCount")));
-        resetButton = new JButton("Reset");
+        JButton resetButton = new JButton("Reset");
         resetButton.setActionCommand("reset");
         resetButton.addActionListener(this::actionPerformed);
         resetButton.setFocusable(false);
-        newWindowButton = new JButton("Create Window");
+        JButton newWindowButton = new JButton("Create Window");
         newWindowButton.setActionCommand("createWindow");
         newWindowButton.addActionListener(this::actionPerformed);
         newWindowButton.setFocusable(false);
@@ -82,7 +85,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         loadTerrain.setFocusable(false);
         loadTerrain.setActionCommand("loadTerrain");
         loadTerrain.addActionListener(this::actionPerformed);
-        loadTerrain.setEnabled(true);
+        loadTerrain.setEnabled(false);
         slider = new JSlider(JSlider.HORIZONTAL);
         slider.setMinimum(1);
         slider.setMaximum(25);
@@ -116,9 +119,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         int reqSize = slider.getValue();
         localProperties.setProperty("cellSize", String.valueOf(reqSize));
         System.out.println(String.format("Setting zoom to %d", reqSize));
-        terrainFrame.setCellSize(reqSize);
-        terrainFrame.repaint();
-        terrainFrame.revalidate();
+        if (terrainFrame != null) {
+            terrainFrame.setCellSize(reqSize);
+            terrainFrame.repaint();
+            terrainFrame.revalidate();
+        }
         pack();
     }
 
@@ -132,6 +137,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 xCountChoice.setSelectedItem(Integer.parseInt(localProperties.getProperty("XCount")));
                 yCountChoice.setSelectedItem(Integer.parseInt(localProperties.getProperty("YCount")));
                 slider.setValue(Integer.parseInt(localProperties.getProperty("cellSize")));
+                terrainFrameClosed();
                 pack(); // Resize the window to fit contents
                 break;
             }
@@ -142,6 +148,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 randomizeFireButton.setEnabled(true);
                 randomizeTerrainButton.setEnabled(true);
                 saveTerrain.setEnabled(true);
+                loadTerrain.setEnabled(true);
                 break;
             }
             case "setXCount": {
@@ -155,11 +162,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 break;
             }
             case "start": {
-                if (! terrainFrame.isRunning()) {
-                    terrainFrame.startIteration();
+                if (! iterationTimer.isRunning()) {
+                    iterationTimer.start();
                     startButton.setText("Stop");
                 } else {
-                    terrainFrame.stopIteration();
+                    iterationTimer.stop();
                     startButton.setText("Start");
                 }
                 break;
@@ -170,6 +177,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
             }
             case "randomizeTerrain": {
                 terrainFrame.randomizeTerrain();
+                mapFrame = new MapFrame(localProperties, this, logger, terrainFrame.getTerrainPoints());
                 break;
             }
             case "saveTerrain": {
@@ -185,6 +193,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 try {
                     fileChooser.showOpenDialog(this);
                     terrainFrame.loadTerrain(fileChooser.getSelectedFile().getAbsolutePath());
+                    mapFrame = new MapFrame(localProperties, this, logger, terrainFrame.getTerrainPoints());
                 } catch (IOException e2) {
                     logger.log(Level.SEVERE, e2.getMessage(), e2);
                 }
@@ -218,6 +227,19 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         startButton.setText("Start");
         startButton.setEnabled(false);
         randomizeFireButton.setEnabled(false);
+        randomizeTerrainButton.setEnabled(false);
+        saveTerrain.setEnabled(false);
+        loadTerrain.setEnabled(false);
+        mapFrame.dispose();
+    }
+
+    void mapFrameClosed() {
+        terrainFrame.dispose();
+    }
+
+    void timerHandler(ActionEvent e) {
+        terrainFrame.timerHandler();
+        mapFrame.timerHandler();
     }
 
 }

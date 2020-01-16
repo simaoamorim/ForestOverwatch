@@ -1,0 +1,19 @@
+package ForestOverWatch;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class BaseGridFrame extends JFrame {
+    private static final Dimension frameSize = new Dimension(700,600);
+    private static final Dimension maxFrameSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+    public BaseGridFrame() {
+        setPreferredSize(frameSize);
+        setMinimumSize(frameSize);
+        setMaximumSize(maxFrameSize);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
+        pack();
+        setVisible(true);
+    }
+
+}
