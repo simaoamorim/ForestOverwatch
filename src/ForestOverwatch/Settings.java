@@ -1,4 +1,4 @@
-package forestOverWatch;
+package ForestOverwatch;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -12,7 +12,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
+public class Settings extends JFrame {
+    private JComboBox<Integer> xCountChoice;
     private JComboBox<Integer> yCountChoice;
     private JButton startButton;
     private JButton randomizeFireButton;
@@ -147,6 +148,8 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 randomizeTerrainButton.setEnabled(true);
                 saveTerrain.setEnabled(true);
                 loadTerrain.setEnabled(true);
+                xCountChoice.setEnabled(false);
+                yCountChoice.setEnabled(false);
                 break;
             }
             case "setXCount": {
@@ -204,7 +207,6 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     }
 
     private void loadProperties() {
-        localProperties.clear();
         try {
             InputStream defaultPreferencesFile = getClass().getResourceAsStream("default.cfg");
             localProperties.load(defaultPreferencesFile);
@@ -229,8 +231,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         randomizeTerrainButton.setEnabled(false);
         saveTerrain.setEnabled(false);
         loadTerrain.setEnabled(false);
+        xCountChoice.setEnabled(true);
+        yCountChoice.setEnabled(true);
         iterationTimer.stop();
-        mapFrame.dispose();
+        if (mapFrame != null)
+            mapFrame.dispose();
     }
 
     void mapFrameClosed() {

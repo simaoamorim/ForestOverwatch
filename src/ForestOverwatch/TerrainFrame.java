@@ -1,4 +1,4 @@
-package forestOverWatch;
+package ForestOverwatch;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,7 +49,9 @@ public class TerrainFrame extends BaseGridFrame {
     void timerHandler() {
         terrainGrid.iteration();
         iterationCounter++;
-        setTitle("Forest Over-Watch - Terrain (Iteration "+iterationCounter.toString()+")");
+        int minutes = iterationCounter / 4800; // = (iterationCounter / 80) / 60
+        int seconds = (iterationCounter / 80) % 60;
+        setTitle(String.format("Forest Over-Watch - Terrain (Iteration %d, %dm%ds)", iterationCounter, minutes, seconds));
     }
 
     public void setCellSize(int size) { terrainGrid.setCellSize(size); }

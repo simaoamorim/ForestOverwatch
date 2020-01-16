@@ -1,4 +1,4 @@
-package forestOverWatch;
+package ForestOverwatch;
 
 import javax.swing.*;
 import java.util.logging.ConsoleHandler;

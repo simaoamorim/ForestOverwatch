@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: forestOverWatch.Launcher
+Main-Class: ForestOverwatch.Launcher
 Class-Path: ./
 
