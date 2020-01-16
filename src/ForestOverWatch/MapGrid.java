@@ -15,23 +15,29 @@ public class MapGrid extends JComponent {
     private Logger logger;
     private Drone drones[];
     private Properties localProperties;
+    private TerrainPoint[][] terrainPoints;
 
-    MapGrid(int XCount, int YCount, int cellSIze, Logger logger, Properties properties) {
+    MapGrid(int XCount, int YCount, int cellSIze, Logger logger, Properties properties, TerrainPoint[][] terrainPoints) {
         this.XCount = XCount;
         this.YCount = YCount;
         this.cellSize = cellSIze;
         this.logger = logger;
         localProperties = properties;
+        this.terrainPoints = terrainPoints;
         this.setPreferredSize(
                 new Dimension(
                         (XCount *cellSize)+(2*margin),
                         (YCount *cellSize)+(2*margin)
                 )
         );
+        initialize();
         drones = new Drone[3];
-        drones[0] = new Drone(mapPoints, localProperties, 1);
-        drones[1] = new Drone(mapPoints, localProperties, 2);
-        drones[2] = new Drone(mapPoints, localProperties, 3);
+        drones[0] = new Drone(mapPoints, localProperties, 1, terrainPoints);
+        drones[1] = new Drone(mapPoints, localProperties, 2, terrainPoints);
+        drones[2] = new Drone(mapPoints, localProperties, 3, terrainPoints);
+        drones[0].randomPlacement();
+        drones[1].randomPlacement();
+        drones[2].randomPlacement();
     }
 
     void initialize() {
@@ -79,21 +85,25 @@ public class MapGrid extends JComponent {
                     if (Arrays.stream(drones).anyMatch(drones -> drones.getActualPosition().equals(mapPoints[finalX][finalY]))) {
                         g.setColor(new Color(0xB641B2));
                     } else {
-                        switch (mapPoints[x][y].getType()) {
-                            case GROUND:
-                                g.setColor(new Color(0x7B4716));
-                                break;
-                            case TREE:
-                                g.setColor(new Color(0x00AA00));
-                                break;
-                            case WATER:
-                                g.setColor(new Color(0x0066FF));
-                                break;
-                            case FIRE:
-                                g.setColor(new Color(0xFF0000));
-                                break;
-                            default:
-                                g.setColor(getBackground());
+                        if (mapPoints[x][y].isScanned()) {
+                            switch (mapPoints[x][y].getType()) {
+                                case GROUND:
+                                    g.setColor(new Color(0x7B4716));
+                                    break;
+                                case TREE:
+                                    g.setColor(new Color(0x00AA00));
+                                    break;
+                                case WATER:
+                                    g.setColor(new Color(0x0066FF));
+                                    break;
+                                case FIRE:
+                                    g.setColor(new Color(0xFF0000));
+                                    break;
+                                default:
+                                    g.setColor(new Color(0x555555));
+                            }
+                        } else {
+                            g.setColor(new Color(0x555555));
                         }
                         g.fillRect(margin + (x * cellSize), margin + (y * cellSize), cellSize, cellSize);
                     }
@@ -105,4 +115,12 @@ public class MapGrid extends JComponent {
         this.setPreferredSize(new Dimension( (_width+(2*margin)), (_height+(2*margin))));
     }
 
+    void iteration() {
+        for (Drone drone : drones) {
+            drone.scan();
+            drone.move();
+        }
+        repaint();
+        revalidate();
+    }
 }

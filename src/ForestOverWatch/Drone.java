@@ -1,6 +1,7 @@
 package ForestOverWatch;
 
 import java.util.Properties;
+import java.util.Random;
 
 public class Drone {
     private static Integer []types ={1,2,3};
@@ -13,12 +14,14 @@ public class Drone {
     private Integer XCount;
     private Integer YCount;
     private Properties localProperties;
+    private TerrainPoint[][] terrainPoints;
 
-    Drone(MapPoint[][] mapPoints, Properties properties, Integer type) {
+    Drone(MapPoint[][] mapPoints, Properties properties, Integer type, TerrainPoint[][] terrainPoints) {
         this.mapPoints = mapPoints;
         localProperties = properties;
         XCount = Integer.parseInt(localProperties.getProperty("XCount"));
         YCount = Integer.parseInt(localProperties.getProperty("YCount"));
+        this.terrainPoints = terrainPoints;
         this.type = type;
         switch (this.type) {
             case 1: velocity = 80; break;
@@ -64,7 +67,10 @@ public class Drone {
     }
 
     void scanSquare(MapPoint scannedSquare){
+        int x = scannedSquare.getXCoordinate();
+        int y = scannedSquare.getYCoordinate();
         scannedSquare.setStaticField(0);
+        scannedSquare.setType(terrainPoints[x][y].getType());
         scannedSquare.setScanned(true); //Use this to show the points in the MapGrid
     }
 
@@ -101,5 +107,13 @@ public class Drone {
 
     public MapPoint getActualPosition() {
         return actualPosition;
+    }
+
+    void randomPlacement() {
+        switch (new Random().nextInt(2)) {
+            case 0: actualPosition = mapPoints[0][new Random().nextInt(YCount)]; break;
+            case 1: actualPosition = mapPoints[XCount-1][new Random().nextInt(YCount)]; break;
+            default: break;
+        }
     }
 }

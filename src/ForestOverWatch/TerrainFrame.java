@@ -75,4 +75,8 @@ public class TerrainFrame extends BaseGridFrame {
         terrainGrid.loadTerrain(path);
     }
 
+    TerrainPoint[][] getTerrainPoints() {
+        return terrainGrid.terrainPoints;
+    }
+
 }

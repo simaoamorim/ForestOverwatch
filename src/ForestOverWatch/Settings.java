@@ -144,7 +144,6 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
             case "createWindow": {
                 if (terrainFrame != null) terrainFrame.dispose();
                 terrainFrame = new TerrainFrame(localProperties, this, logger);
-                mapFrame = new MapFrame(localProperties, this, logger);
                 startButton.setEnabled(true);
                 randomizeFireButton.setEnabled(true);
                 randomizeTerrainButton.setEnabled(true);
@@ -178,6 +177,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
             }
             case "randomizeTerrain": {
                 terrainFrame.randomizeTerrain();
+                mapFrame = new MapFrame(localProperties, this, logger, terrainFrame.getTerrainPoints());
                 break;
             }
             case "saveTerrain": {
@@ -193,6 +193,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 try {
                     fileChooser.showOpenDialog(this);
                     terrainFrame.loadTerrain(fileChooser.getSelectedFile().getAbsolutePath());
+                    mapFrame = new MapFrame(localProperties, this, logger, terrainFrame.getTerrainPoints());
                 } catch (IOException e2) {
                     logger.log(Level.SEVERE, e2.getMessage(), e2);
                 }
