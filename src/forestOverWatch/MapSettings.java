@@ -1,4 +1,4 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,44 +6,42 @@ import java.awt.event.ActionEvent;
 import java.util.Properties;
 
 public class MapSettings extends JFrame {
-    private Properties localProperties;
-    private int XCount;
-    private int YCount;
-    private MapGrid mapGrid;
-    private Integer[] DroneCount = new Integer[3];
-    private JSpinner[][] droneXPosition = new JSpinner[3][];
-    private JSpinner[][] droneYPosition = new JSpinner[3][];
-    private JCheckBox randomizeAll = new JCheckBox("Randomize placements");
+    private final int XCount;
+    private final int YCount;
+    private final MapGrid mapGrid;
+    private final Integer[] DroneCount = new Integer[3];
+    private final JSpinner[][] droneXPosition = new JSpinner[3][];
+    private final JSpinner[][] droneYPosition = new JSpinner[3][];
+    private final JCheckBox randomizeAll = new JCheckBox("Randomize placements");
 
     MapSettings(Properties properties, MapGrid mapGrid) {
-        localProperties = properties;
         this.mapGrid = mapGrid;
-        XCount = Integer.parseInt(localProperties.getProperty("XCount"));
-        YCount = Integer.parseInt(localProperties.getProperty("YCount"));
-        DroneCount[0] = Integer.parseInt(localProperties.getProperty("DroneCount1"));
-        DroneCount[1] = Integer.parseInt(localProperties.getProperty("DroneCount2"));
-        DroneCount[2] = Integer.parseInt(localProperties.getProperty("DroneCount3"));
+        XCount = Integer.parseInt(properties.getProperty("XCount"));
+        YCount = Integer.parseInt(properties.getProperty("YCount"));
+        DroneCount[0] = Integer.parseInt(properties.getProperty("DroneCount1"));
+        DroneCount[1] = Integer.parseInt(properties.getProperty("DroneCount2"));
+        DroneCount[2] = Integer.parseInt(properties.getProperty("DroneCount3"));
         initUI();
     }
 
     private void initUI() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         JPanel main = new JPanel(new GridLayout(0,2));
-        JPanel[] childs = new JPanel[3];
+        JPanel[] children = new JPanel[3];
         for (int i=0; i<3; i++) {
-            childs[i] = new JPanel(new GridLayout(0,2));
+            children[i] = new JPanel(new GridLayout(0,2));
             droneXPosition[i] = new JSpinner[DroneCount[i]];
             droneYPosition[i] = new JSpinner[DroneCount[i]];
             for (int j=0; j<DroneCount[i]; j++) {
                 droneXPosition[i][j] = new JSpinner(new SpinnerNumberModel(0,0,XCount,1));
                 droneYPosition[i][j] = new JSpinner(new SpinnerNumberModel(0,0,YCount,1));
-                childs[i].add(new JLabel("X:"));
-                childs[i].add(droneXPosition[i][j]);
-                childs[i].add(new JLabel("Y:"));
-                childs[i].add(droneYPosition[i][j]);
+                children[i].add(new JLabel("X:"));
+                children[i].add(droneXPosition[i][j]);
+                children[i].add(new JLabel("Y:"));
+                children[i].add(droneYPosition[i][j]);
             }
             main.add(new JLabel(String.format("Drone type %d", i)));
-            main.add(childs[i]);
+            main.add(children[i]);
         }
         JButton finish = new JButton("Apply");
         finish.setEnabled(true);

@@ -1,4 +1,4 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import java.util.ArrayList;
 

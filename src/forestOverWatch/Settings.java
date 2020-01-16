@@ -1,4 +1,4 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -19,13 +19,13 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private JButton randomizeTerrainButton;
     private JButton saveTerrain;
     private JButton loadTerrain;
-    private JFileChooser fileChooser = new JFileChooser(".");
+    private final JFileChooser fileChooser = new JFileChooser(".");
     private JSlider slider;
     private TerrainFrame terrainFrame;
     private MapFrame mapFrame;
-    private Properties localProperties = new Properties();
-    private Logger logger;
-    private Timer iterationTimer = new Timer(timeStep, this::timerHandler);
+    private final Properties localProperties = new Properties();
+    private final Logger logger;
+    private final Timer iterationTimer = new Timer(timeStep, this::timerHandler);
     private static final int timeStep = 12; // Time in ms (1000/80 = 12.5)
 
     Settings(Logger logger) {
@@ -175,7 +175,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
             }
             case "randomizeTerrain": {
                 terrainFrame.randomizeTerrain();
-                mapFrame = new MapFrame(localProperties, this, logger, terrainFrame.getTerrainPoints());
+                mapFrame = new MapFrame(localProperties, this, terrainFrame.getTerrainPoints());
                 break;
             }
             case "saveTerrain": {
@@ -191,7 +191,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 try {
                     fileChooser.showOpenDialog(this);
                     terrainFrame.loadTerrain(fileChooser.getSelectedFile().getAbsolutePath());
-                    mapFrame = new MapFrame(localProperties, this, logger, terrainFrame.getTerrainPoints());
+                    mapFrame = new MapFrame(localProperties, this, terrainFrame.getTerrainPoints());
                 } catch (IOException e2) {
                     logger.log(Level.SEVERE, e2.getMessage(), e2);
                 }

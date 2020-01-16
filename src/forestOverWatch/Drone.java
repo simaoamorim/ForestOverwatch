@@ -1,29 +1,27 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import java.util.Properties;
 import java.util.Random;
 
 public class Drone {
-    private int type;
+    private final int type;
     private int stepsToWait;
     private int spentIterations = 0;
     private int moveScanDepth;
     private MapPoint actualPosition;
-    private MapPoint[][] mapPoints;
+    private final MapPoint[][] mapPoints;
     enum Orientation {Horizontal, Vertical}
     private Orientation orientation;
-    private Integer XCount;
-    private Integer YCount;
-    private Properties localProperties;
-    private TerrainPoint[][] terrainPoints;
-    private MapGrid mapGrid;
+    private final Integer XCount;
+    private final Integer YCount;
+    private final TerrainPoint[][] terrainPoints;
+    private final MapGrid mapGrid;
 
     Drone(MapPoint[][] mapPoints, MapGrid mapGrid, Properties properties, Integer type, TerrainPoint[][] terrainPoints) {
         this.mapPoints = mapPoints;
-        localProperties = properties;
         this.mapGrid = mapGrid;
-        XCount = Integer.parseInt(localProperties.getProperty("XCount"));
-        YCount = Integer.parseInt(localProperties.getProperty("YCount"));
+        XCount = Integer.parseInt(properties.getProperty("XCount"));
+        YCount = Integer.parseInt(properties.getProperty("YCount"));
         this.terrainPoints = terrainPoints;
         this.type = type;
         switch (this.type) {

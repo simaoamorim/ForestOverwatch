@@ -1,4 +1,4 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +10,9 @@ import java.util.logging.Logger;
 
 public class TerrainFrame extends BaseGridFrame {
     private TerrainGrid terrainGrid;
-    public static Integer[] Sizes = TerrainGrid.Sizes;
-    private Properties localProperties;
-    private Logger logger;
+    public static final Integer[] Sizes = TerrainGrid.Sizes;
+    private final Properties localProperties;
+    private final Logger logger;
     private Integer iterationCounter;
 
     public TerrainFrame(Properties localProperties, Settings settings, Logger logger) {

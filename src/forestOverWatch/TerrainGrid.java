@@ -1,4 +1,4 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,12 +9,12 @@ import java.util.logging.Logger;
 class TerrainGrid extends JComponent {
     private int cellSize;
     private static final int margin = 1;
-    public static Integer[] Sizes = {50,100,200,500,1000};
-    int XCount;
-    int YCount;
+    public static final Integer[] Sizes = {50,100,200,500,1000};
+    final int XCount;
+    final int YCount;
     private boolean firstIteration = true;
     public TerrainPoint[][] terrainPoints;
-    private Logger logger;
+    private final Logger logger;
 
     TerrainGrid(int XCount, int YCount, int cellSize, Logger logger) {
         this.XCount = XCount;

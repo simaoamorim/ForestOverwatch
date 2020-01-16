@@ -1,4 +1,4 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -9,7 +9,7 @@ class TerrainPoint implements Serializable {
     private transient ArrayList<TerrainPoint> neighbours;
     private Types type;
     private double FirePercentage = 0;
-    private Point coordinates;
+    private final Point coordinates;
     private boolean fireLocked = false;
     public enum Types {WATER,TREE,GROUND,FIRE;
         public static Types getRandom() {

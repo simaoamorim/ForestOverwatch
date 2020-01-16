@@ -1,27 +1,24 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 public class MapGrid extends JComponent {
     private int cellSize;
     private static final int margin = 1;
-    private int XCount;
-    private int YCount;
+    private final int XCount;
+    private final int YCount;
     private MapPoint[][] mapPoints;
-    private Logger logger;
     private Drone[] drones;
-    private Properties localProperties;
-    private TerrainPoint[][] terrainPoints;
-    private int totalDroneCount;
+    private final Properties localProperties;
+    private final TerrainPoint[][] terrainPoints;
+    private final int totalDroneCount;
     private boolean ready = false;
 
-    MapGrid(Logger logger, Properties properties, TerrainPoint[][] terrainPoints) {
-        this.logger = logger;
+    MapGrid(Properties properties, TerrainPoint[][] terrainPoints) {
         localProperties = properties;
         this.terrainPoints = terrainPoints;
         XCount = Integer.parseInt(localProperties.getProperty("XCount"));
@@ -38,7 +35,6 @@ public class MapGrid extends JComponent {
         );
         initialize();
         new MapSettings(localProperties, this);
-//        calcStaticField();
     }
 
     void initialize() {
