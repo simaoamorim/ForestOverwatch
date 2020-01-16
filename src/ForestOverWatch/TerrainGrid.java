@@ -328,7 +328,6 @@ class TerrainGrid extends JComponent {
         }
         repaint();
         revalidate();
-        requestFocus();
     }
 
     void setCellSize(int size) {
