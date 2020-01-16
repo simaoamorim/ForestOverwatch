@@ -11,8 +11,6 @@ import java.util.logging.Logger;
 
 public class TerrainFrame extends BaseGridFrame {
     private TerrainGrid terrainGrid;
-    private Timer iterationTimer = new Timer(timeStep, this::timerHandler);
-    private static final int timeStep = 12; // Time in ms (1000/80 = 12.5)
     public static Integer[] Sizes = TerrainGrid.Sizes;
     private Properties localProperties;
     private Logger logger;
@@ -33,7 +31,6 @@ public class TerrainFrame extends BaseGridFrame {
         setLocation(settings.getX()+settings.getWidth(), settings.getY());
         initUI();
         pack();
-        iterationTimer.stop();
         iterationCounter = 0;
     }
 
@@ -50,17 +47,11 @@ public class TerrainFrame extends BaseGridFrame {
         add(mainPane);
     }
 
-    private void timerHandler(ActionEvent e) {
+    void timerHandler() {
         terrainGrid.iteration();
         iterationCounter++;
         setTitle("Forest Over-Watch - Terrain (Iteration "+iterationCounter.toString()+")");
     }
-
-    public boolean isRunning() { return iterationTimer.isRunning(); }
-
-    public void startIteration() { iterationTimer.start(); }
-
-    public void stopIteration() { iterationTimer.stop(); }
 
     public void setCellSize(int size) { terrainGrid.setCellSize(size); }
 

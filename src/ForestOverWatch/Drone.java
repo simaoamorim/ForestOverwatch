@@ -12,11 +12,13 @@ public class Drone {
     private Orientation orientation;
     private Integer XCount;
     private Integer YCount;
+    private Properties localProperties;
 
     Drone(MapPoint[][] mapPoints, Properties properties, Integer type) {
         this.mapPoints = mapPoints;
-        XCount = Integer.parseInt(properties.getProperty("XCount"));
-        YCount = Integer.parseInt(properties.getProperty("YCount"));
+        localProperties = properties;
+        XCount = Integer.parseInt(localProperties.getProperty("XCount"));
+        YCount = Integer.parseInt(localProperties.getProperty("YCount"));
         this.type = type;
         switch (this.type) {
             case 1: velocity = 80; break;
@@ -97,4 +99,7 @@ public class Drone {
         }
     }
 
+    public MapPoint getActualPosition() {
+        return actualPosition;
+    }
 }

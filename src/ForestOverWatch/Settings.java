@@ -25,6 +25,8 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     private MapFrame mapFrame;
     private Properties localProperties = new Properties();
     private Logger logger;
+    private Timer iterationTimer = new Timer(timeStep, this::timerHandler);
+    private static final int timeStep = 12; // Time in ms (1000/80 = 12.5)
 
     Settings(Logger logger) {
         this.logger = logger;
@@ -161,11 +163,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
                 break;
             }
             case "start": {
-                if (! terrainFrame.isRunning()) {
-                    terrainFrame.startIteration();
+                if (! iterationTimer.isRunning()) {
+                    iterationTimer.start();
                     startButton.setText("Stop");
                 } else {
-                    terrainFrame.stopIteration();
+                    iterationTimer.stop();
                     startButton.setText("Start");
                 }
                 break;
@@ -232,6 +234,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
 
     void mapFrameClosed() {
         terrainFrame.dispose();
+    }
+
+    void timerHandler(ActionEvent e) {
+        terrainFrame.timerHandler();
+        mapFrame.timerHandler();
     }
 
 }

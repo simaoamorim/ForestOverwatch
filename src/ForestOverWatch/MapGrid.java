@@ -2,6 +2,8 @@ package ForestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 public class MapGrid extends JComponent {
@@ -11,18 +13,25 @@ public class MapGrid extends JComponent {
     private int YCount;
     private MapPoint[][] mapPoints;
     private Logger logger;
+    private Drone drones[];
+    private Properties localProperties;
 
-    MapGrid(int XCount, int YCount, int cellSIze, Logger logger) {
+    MapGrid(int XCount, int YCount, int cellSIze, Logger logger, Properties properties) {
         this.XCount = XCount;
         this.YCount = YCount;
         this.cellSize = cellSIze;
         this.logger = logger;
+        localProperties = properties;
         this.setPreferredSize(
                 new Dimension(
                         (XCount *cellSize)+(2*margin),
                         (YCount *cellSize)+(2*margin)
                 )
         );
+        drones = new Drone[3];
+        drones[0] = new Drone(mapPoints, localProperties, 1);
+        drones[1] = new Drone(mapPoints, localProperties, 2);
+        drones[2] = new Drone(mapPoints, localProperties, 3);
     }
 
     void initialize() {
@@ -57,6 +66,43 @@ public class MapGrid extends JComponent {
                 }
             }
         }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (mapPoints != null) {
+            for (int x = 0; x < XCount; x++) {
+                for (int y = 0; y < YCount; y++) {
+                    int finalX = x;
+                    int finalY = y;
+                    if (Arrays.stream(drones).anyMatch(drones -> drones.getActualPosition().equals(mapPoints[finalX][finalY]))) {
+                        g.setColor(new Color(0xB641B2));
+                    } else {
+                        switch (mapPoints[x][y].getType()) {
+                            case GROUND:
+                                g.setColor(new Color(0x7B4716));
+                                break;
+                            case TREE:
+                                g.setColor(new Color(0x00AA00));
+                                break;
+                            case WATER:
+                                g.setColor(new Color(0x0066FF));
+                                break;
+                            case FIRE:
+                                g.setColor(new Color(0xFF0000));
+                                break;
+                            default:
+                                g.setColor(getBackground());
+                        }
+                        g.fillRect(margin + (x * cellSize), margin + (y * cellSize), cellSize, cellSize);
+                    }
+                }
+            }
+        }
+        int _width = (XCount * cellSize);
+        int _height = (YCount * cellSize);
+        this.setPreferredSize(new Dimension( (_width+(2*margin)), (_height+(2*margin))));
     }
 
 }

@@ -23,7 +23,7 @@ public class MapFrame extends BaseGridFrame {
         YCount = Integer.parseInt(localProperties.getProperty("YCount"));
         CellSize = Integer.parseInt(localProperties.getProperty("cellSize"));
         this.logger = logger;
-        mapGrid = new MapGrid(XCount, YCount, CellSize, this.logger);
+        mapGrid = new MapGrid(XCount, YCount, CellSize, this.logger, localProperties);
         mapGrid.initialize();
         addWindowListener(new WindowAdapter() {
             @Override
@@ -34,5 +34,9 @@ public class MapFrame extends BaseGridFrame {
         });
         setLocation(settings.getX()+settings.getWidth()+50, settings.getY()+50);
         setTitle("Forest Over-Watch - Map");
+    }
+
+    void timerHandler() {
+
     }
 }
