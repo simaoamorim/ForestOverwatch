@@ -1,33 +1,35 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import java.util.Properties;
 import java.util.Random;
 
 public class Drone {
-    private static Integer []types ={1,2,3};
-    private int type;
-    private int velocity;
+    private final int type;
+    private int stepsToWait;
+    private int spentIterations = 0;
+    private int moveScanDepth;
     private MapPoint actualPosition;
-    private MapPoint[][] mapPoints;
+    private final MapPoint[][] mapPoints;
     enum Orientation {Horizontal, Vertical}
     private Orientation orientation;
-    private Integer XCount;
-    private Integer YCount;
-    private Properties localProperties;
-    private TerrainPoint[][] terrainPoints;
+    private final Integer XCount;
+    private final Integer YCount;
+    private final TerrainPoint[][] terrainPoints;
+    private final MapGrid mapGrid;
 
-    Drone(MapPoint[][] mapPoints, Properties properties, Integer type, TerrainPoint[][] terrainPoints) {
+    Drone(MapPoint[][] mapPoints, MapGrid mapGrid, Properties properties, Integer type, TerrainPoint[][] terrainPoints) {
         this.mapPoints = mapPoints;
-        localProperties = properties;
-        XCount = Integer.parseInt(localProperties.getProperty("XCount"));
-        YCount = Integer.parseInt(localProperties.getProperty("YCount"));
+        this.mapGrid = mapGrid;
+        XCount = Integer.parseInt(properties.getProperty("XCount"));
+        YCount = Integer.parseInt(properties.getProperty("YCount"));
         this.terrainPoints = terrainPoints;
         this.type = type;
         switch (this.type) {
-            case 1: velocity = 80; break;
-            case 2: velocity = 40; break;
-            case 3: velocity = 10; break;
+            case 1: stepsToWait = 1; moveScanDepth=0; break;
+            case 2: stepsToWait = 2; moveScanDepth=1; break;
+            case 3: stepsToWait = 8; moveScanDepth=2; break;
         }
+
     }
 
     void scan(){
@@ -75,26 +77,35 @@ public class Drone {
     }
 
     void move(){
-        float staticField_aux = 0.0f;
-        MapPoint aux = actualPosition;
-        int x_aux = actualPosition.getXCoordinate();
-        int y_aux = actualPosition.getYCoordinate();
+        if (spentIterations == stepsToWait) {
+            spentIterations = 0;
+            float staticField_aux = actualPosition.getNeighbourByIndexMap(0).getStaticField();
+            MapPoint aux = actualPosition.getNeighbourByIndexMap(0);
+            int x_aux = actualPosition.getXCoordinate();
+            int y_aux = actualPosition.getYCoordinate();
 
-        for(int x = -1; x < 2; x++){
-            for( int y = -1; y < 2; y++){
-                if ((x == 0) ^ (y == 0)) {
-                    if (((x_aux+x) != -1) && ((x_aux+x) != (XCount)) &&
-                            ((y_aux+y) != -1) && ((y_aux+y) != (YCount))){
-                        if(mapPoints[x+x_aux][y+y_aux].getStaticField() >= staticField_aux){
-                            staticField_aux = mapPoints[x+x_aux][y+y_aux].getStaticField();
-                            aux = mapPoints[x+x_aux][y+y_aux];
+            for(int x = -1; x < 2; x++){
+                for( int y = -1; y < 2; y++){
+                    if ((x == 0) ^ (y == 0)) {
+                        int new_x = x + x_aux;
+                        int new_y = y + y_aux;
+                        if (new_x != -1 && new_x != XCount && new_y != -1 && new_y != YCount){
+                            if (! mapGrid.pointHasDrone(mapPoints[new_x][new_y])) {
+                                float newval = mapPoints[new_x][new_y].getStaticField(moveScanDepth);
+                                if(newval > staticField_aux){
+                                    staticField_aux = newval;
+                                    aux = mapPoints[new_x][new_y];
+                                }
+                            }
                         }
                     }
                 }
             }
+            calculateOrientation(actualPosition, aux);
+            actualPosition = aux;
+        } else {
+            spentIterations++;
         }
-        calculateOrientation(actualPosition, aux);
-        actualPosition = aux;
     }
 
     void calculateOrientation(MapPoint actual, MapPoint next){
@@ -115,5 +126,9 @@ public class Drone {
             case 1: actualPosition = mapPoints[XCount-1][new Random().nextInt(YCount)]; break;
             default: break;
         }
+    }
+
+    void placeAt(int X, int Y) {
+        actualPosition = mapPoints[X][Y];
     }
 }

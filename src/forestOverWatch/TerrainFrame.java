@@ -1,8 +1,7 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -11,9 +10,9 @@ import java.util.logging.Logger;
 
 public class TerrainFrame extends BaseGridFrame {
     private TerrainGrid terrainGrid;
-    public static Integer[] Sizes = TerrainGrid.Sizes;
-    private Properties localProperties;
-    private Logger logger;
+    public static final Integer[] Sizes = TerrainGrid.Sizes;
+    private final Properties localProperties;
+    private final Logger logger;
     private Integer iterationCounter;
 
     public TerrainFrame(Properties localProperties, Settings settings, Logger logger) {
@@ -77,6 +76,18 @@ public class TerrainFrame extends BaseGridFrame {
 
     TerrainPoint[][] getTerrainPoints() {
         return terrainGrid.terrainPoints;
+    }
+
+    @Override
+    public void repaint() {
+        super.repaint();
+        terrainGrid.repaint();
+    }
+
+    @Override
+    public void revalidate() {
+        super.revalidate();
+        terrainGrid.revalidate();
     }
 
 }

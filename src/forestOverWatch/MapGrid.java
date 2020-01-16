@@ -1,29 +1,32 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 public class MapGrid extends JComponent {
     private int cellSize;
     private static final int margin = 1;
-    private int XCount;
-    private int YCount;
+    private final int XCount;
+    private final int YCount;
     private MapPoint[][] mapPoints;
-    private Logger logger;
-    private Drone drones[];
-    private Properties localProperties;
-    private TerrainPoint[][] terrainPoints;
+    private Drone[] drones;
+    private final Properties localProperties;
+    private final TerrainPoint[][] terrainPoints;
+    private final int totalDroneCount;
+    private boolean ready = false;
 
-    MapGrid(int XCount, int YCount, int cellSIze, Logger logger, Properties properties, TerrainPoint[][] terrainPoints) {
-        this.XCount = XCount;
-        this.YCount = YCount;
-        this.cellSize = cellSIze;
-        this.logger = logger;
+    MapGrid(Properties properties, TerrainPoint[][] terrainPoints) {
         localProperties = properties;
         this.terrainPoints = terrainPoints;
+        XCount = Integer.parseInt(localProperties.getProperty("XCount"));
+        YCount = Integer.parseInt(localProperties.getProperty("YCount"));
+        cellSize = Integer.parseInt(localProperties.getProperty("cellSize"));
+        totalDroneCount = Integer.parseInt(localProperties.getProperty("DroneCount1")) +
+                Integer.parseInt(localProperties.getProperty("DroneCount2")) +
+                Integer.parseInt(localProperties.getProperty("DroneCount3"));
         this.setPreferredSize(
                 new Dimension(
                         (XCount *cellSize)+(2*margin),
@@ -31,13 +34,7 @@ public class MapGrid extends JComponent {
                 )
         );
         initialize();
-        drones = new Drone[3];
-        drones[0] = new Drone(mapPoints, localProperties, 1, terrainPoints);
-        drones[1] = new Drone(mapPoints, localProperties, 2, terrainPoints);
-        drones[2] = new Drone(mapPoints, localProperties, 3, terrainPoints);
-        drones[0].randomPlacement();
-        drones[1].randomPlacement();
-        drones[2].randomPlacement();
+        new MapSettings(localProperties, this);
     }
 
     void initialize() {
@@ -46,6 +43,7 @@ public class MapGrid extends JComponent {
             for (int y = 0; y < YCount; y++)
                 mapPoints[x][y] = new MapPoint(x,y);
         setNeighbourhood();
+        drones = new Drone[totalDroneCount];
     }
 
     private void setNeighbourhood() {
@@ -74,16 +72,36 @@ public class MapGrid extends JComponent {
         }
     }
 
+    void calcStaticField(){
+        ready = true;
+        ArrayList<MapPoint> toCheck = new ArrayList<>();
+        for (Drone drone : drones) {
+            toCheck.addAll(drone.getActualPosition().getNeighboursMap());
+            drone.getActualPosition().setScanned(true);
+        }
+        while(!toCheck.isEmpty()){
+            if(!toCheck.get(0).isScanned()){
+                toCheck.get(0).calculateField();
+                for(int x = 0; x < toCheck.get(0).getNeighboursMap().size(); x++){
+                    if(!toCheck.get(0).getNeighbourByIndexMap(x).isScanned())
+                        toCheck.add(toCheck.get(0).getNeighbourByIndexMap(x));
+                }
+            }
+            toCheck.remove(toCheck.get(0));
+        }
+        for (int x = 0; x < XCount; x++)
+            for (int y = 0; y < YCount; y++)
+                mapPoints[x][y].setScanned(false);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (mapPoints != null) {
             for (int x = 0; x < XCount; x++) {
                 for (int y = 0; y < YCount; y++) {
-                    int finalX = x;
-                    int finalY = y;
-                    if (Arrays.stream(drones).anyMatch(drones -> drones.getActualPosition().equals(mapPoints[finalX][finalY]))) {
-                        g.setColor(new Color(0xB641B2));
+                    if (ready && pointHasDrone(mapPoints[x][y])) {
+                        g.setColor(new Color(0xE6E600));
                     } else {
                         if (mapPoints[x][y].isScanned()) {
                             switch (mapPoints[x][y].getType()) {
@@ -105,8 +123,8 @@ public class MapGrid extends JComponent {
                         } else {
                             g.setColor(new Color(0x555555));
                         }
-                        g.fillRect(margin + (x * cellSize), margin + (y * cellSize), cellSize, cellSize);
                     }
+                    g.fillRect(margin + (x * cellSize), margin + (y * cellSize), cellSize, cellSize);
                 }
             }
         }
@@ -120,7 +138,32 @@ public class MapGrid extends JComponent {
             drone.scan();
             drone.move();
         }
+        for(int x=0; x<XCount; x++) {
+            for (int y=0; y<YCount; y++) {
+                mapPoints[x][y].calcStaticField();
+            }
+
+        }
         repaint();
         revalidate();
     }
+
+    void addDrone(int index, int type) {
+        drones[index] = new Drone(mapPoints, this, localProperties, type, terrainPoints);
+        drones[index].randomPlacement();
+    }
+
+    void addDrone(int index, int type, int X, int Y) {
+        drones[index] = new Drone(mapPoints, this, localProperties, type, terrainPoints);
+        drones[index].placeAt(X, Y);
+    }
+
+    void setCellSize(int cellSize) {
+        this.cellSize = cellSize;
+    }
+
+    boolean pointHasDrone(MapPoint point) {
+        return Arrays.stream(drones).anyMatch(drones -> drones.getActualPosition().equals(point));
+    }
+
 }

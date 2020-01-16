@@ -1,4 +1,4 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ public class BaseGridFrame extends JFrame {
         setPreferredSize(frameSize);
         setMinimumSize(frameSize);
         setMaximumSize(maxFrameSize);
-        setDefaultCloseOperation(HIDE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
         setVisible(true);
     }

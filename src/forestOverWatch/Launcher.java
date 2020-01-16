@@ -1,4 +1,4 @@
-package ForestOverWatch;
+package forestOverWatch;
 
 import javax.swing.*;
 import java.util.logging.ConsoleHandler;
@@ -6,8 +6,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Launcher implements Runnable {
-    private Logger logger = Logger.getLogger(getClass().getPackageName());
-    private ConsoleHandler consoleHandler = new ConsoleHandler();
+    private final Logger logger = Logger.getLogger(getClass().getPackageName());
+    private final ConsoleHandler consoleHandler = new ConsoleHandler();
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Launcher());
