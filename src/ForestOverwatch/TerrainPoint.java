@@ -1,4 +1,4 @@
-package forestOverWatch;
+package ForestOverwatch;
 
 import java.awt.*;
 import java.io.Serializable;

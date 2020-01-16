@@ -1,4 +1,4 @@
-package forestOverWatch;
+package ForestOverwatch;
 
 import java.util.Properties;
 import java.util.Random;
@@ -27,7 +27,7 @@ public class Drone {
         switch (this.type) {
             case 1: stepsToWait = 1; moveScanDepth=0; break;
             case 2: stepsToWait = 2; moveScanDepth=1; break;
-            case 3: stepsToWait = 8; moveScanDepth=2; break;
+            case 3: stepsToWait = 8; moveScanDepth=1; break;
         }
 
     }
