@@ -96,14 +96,10 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         buttonsPanel.setLayout(new GridLayout(0,2));
         buttonsPanel.add(new JLabel("Width:", JLabel.RIGHT));
         buttonsPanel.add(xCountChoice);
-//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
         buttonsPanel.add(new JLabel("Height:", JLabel.RIGHT));
         buttonsPanel.add(yCountChoice);
-//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
         buttonsPanel.add(new JLabel("Zoom:", JLabel.RIGHT));
         buttonsPanel.add(slider);
-//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
-//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
         buttonsPanel.add(newWindowButton);
         buttonsPanel.add(resetButton);
         buttonsPanel.add(startButton);
@@ -111,7 +107,6 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         buttonsPanel.add(randomizeTerrainButton);
         buttonsPanel.add(saveTerrain);
         buttonsPanel.add(loadTerrain);
-//        buttonsPanel.add(new JSeparator(JSeparator.HORIZONTAL));
         add(buttonsPanel);
     }
 
@@ -121,8 +116,11 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         System.out.println(String.format("Setting zoom to %d", reqSize));
         if (terrainFrame != null) {
             terrainFrame.setCellSize(reqSize);
+            mapFrame.setCellSize(reqSize);
             terrainFrame.repaint();
             terrainFrame.revalidate();
+            mapFrame.repaint();
+            mapFrame.revalidate();
         }
         pack();
     }
@@ -206,6 +204,7 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
     }
 
     private void loadProperties() {
+        localProperties.clear();
         try {
             InputStream defaultPreferencesFile = getClass().getResourceAsStream("default.cfg");
             localProperties.load(defaultPreferencesFile);

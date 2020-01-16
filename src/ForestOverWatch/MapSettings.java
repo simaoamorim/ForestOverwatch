@@ -11,26 +11,23 @@ public class MapSettings extends JFrame {
     private int YCount;
     private MapGrid mapGrid;
     private Integer[] DroneCount = new Integer[3];
-    private Integer[] DeployedDrones = new Integer[3];
-    private Drone[] drones;
-//    private Integer[][] droneXPosition;
-//    private Integer[][] droneYPosition;
     private JSpinner[][] droneXPosition = new JSpinner[3][];
     private JSpinner[][] droneYPosition = new JSpinner[3][];
+    private JCheckBox randomizeAll = new JCheckBox("Randomize placements");
 
     MapSettings(Properties properties, MapGrid mapGrid) {
         localProperties = properties;
         this.mapGrid = mapGrid;
         XCount = Integer.parseInt(localProperties.getProperty("XCount"));
         YCount = Integer.parseInt(localProperties.getProperty("YCount"));
-        DroneCount[0] = Integer.parseInt(localProperties.getProperty("DroneCount0"));
-        DroneCount[1] = Integer.parseInt(localProperties.getProperty("DroneCount1"));
-        DroneCount[2] = Integer.parseInt(localProperties.getProperty("DroneCount2"));
+        DroneCount[0] = Integer.parseInt(localProperties.getProperty("DroneCount1"));
+        DroneCount[1] = Integer.parseInt(localProperties.getProperty("DroneCount2"));
+        DroneCount[2] = Integer.parseInt(localProperties.getProperty("DroneCount3"));
         initUI();
     }
 
     private void initUI() {
-        setLayout(new FlowLayout());
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         JPanel main = new JPanel(new GridLayout(0,2));
         JPanel[] childs = new JPanel[3];
         for (int i=0; i<3; i++) {
@@ -51,9 +48,11 @@ public class MapSettings extends JFrame {
         JButton finish = new JButton("Apply");
         finish.setEnabled(true);
         finish.addActionListener(this::finish);
+        main.add(randomizeAll);
         main.add(finish);
-        add(main);
-        pack();
+        JScrollPane scroller = new JScrollPane(main);
+        add(scroller);
+        setMinimumSize(new Dimension(300,400));
         setVisible(true);
     }
 
@@ -69,7 +68,10 @@ public class MapSettings extends JFrame {
         int droneCount = 0;
         for (int i=0; i<3; i++) {
             for (int j=0; j<DroneCount[i]; j++) {
-                mapGrid.addDrone(droneCount, i+1, (int) droneXPosition[i][j].getValue(), (int) droneYPosition[i][j].getValue());
+                if (randomizeAll.isSelected())
+                    mapGrid.addDrone(droneCount, i+1);
+                else
+                    mapGrid.addDrone(droneCount, i+1, (int) droneXPosition[i][j].getValue(), (int) droneYPosition[i][j].getValue());
                 droneCount++;
             }
         }

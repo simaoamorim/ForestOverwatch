@@ -16,7 +16,6 @@ public class MapFrame extends BaseGridFrame {
     private Settings settingsWindow;
     private Logger logger;
     private TerrainPoint[][] terrainPoints;
-    private MapSettings mapSettings;
     private Integer[] droneCount = new Integer[3];
 
 
@@ -27,9 +26,9 @@ public class MapFrame extends BaseGridFrame {
         XCount = Integer.parseInt(localProperties.getProperty("XCount"));
         YCount = Integer.parseInt(localProperties.getProperty("YCount"));
         cellSize = Integer.parseInt(localProperties.getProperty("cellSize"));
-        droneCount[0] = Integer.parseInt(localProperties.getProperty("DroneCount0"));
-        droneCount[1] = Integer.parseInt(localProperties.getProperty("DroneCount1"));
-        droneCount[2] = Integer.parseInt(localProperties.getProperty("DroneCount2"));
+        droneCount[0] = Integer.parseInt(localProperties.getProperty("DroneCount1"));
+        droneCount[1] = Integer.parseInt(localProperties.getProperty("DroneCount2"));
+        droneCount[2] = Integer.parseInt(localProperties.getProperty("DroneCount3"));
         this.logger = logger;
         this.terrainPoints = terrainPoints;
         addWindowListener(new WindowAdapter() {
@@ -51,12 +50,26 @@ public class MapFrame extends BaseGridFrame {
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel.add(mapGrid);
         JScrollPane mainPane = new JScrollPane(panel);
-        add(mainPane);
+        add(mainPane, BorderLayout.CENTER);
     }
 
     void timerHandler() {
         mapGrid.iteration();
     }
 
+    void setCellSize(int cellSize) {
+        mapGrid.setCellSize(cellSize);
+    }
 
+    @Override
+    public void repaint() {
+        super.repaint();
+        mapGrid.repaint();
+    }
+
+    @Override
+    public void revalidate() {
+        super.revalidate();
+        mapGrid.revalidate();
+    }
 }

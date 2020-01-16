@@ -2,7 +2,6 @@ package ForestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -77,6 +76,18 @@ public class TerrainFrame extends BaseGridFrame {
 
     TerrainPoint[][] getTerrainPoints() {
         return terrainGrid.terrainPoints;
+    }
+
+    @Override
+    public void repaint() {
+        super.repaint();
+        terrainGrid.repaint();
+    }
+
+    @Override
+    public void revalidate() {
+        super.revalidate();
+        terrainGrid.revalidate();
     }
 
 }

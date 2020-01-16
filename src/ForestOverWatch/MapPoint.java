@@ -12,11 +12,10 @@ public class MapPoint extends TerrainPoint {
     }
 
     void calcStaticField(){
-        if((getType() == Types.TREE) || (getType() == Types.GROUND)){
-            staticField += 1.55;
-        } else if(this.getType() == Types.FIRE){
+        staticField += 1.55;
+        if(this.getType() == Types.FIRE){
             for (MapPoint neighbour : neighbours) {
-                if ((neighbour.getType() != Types.WATER) || !(scanned)) //Verify if it works better
+                if (/*(neighbour.getType() != Types.WATER) ||*/ !(scanned)) //Verify if it works better
                     neighbour.staticField += 1.55;
             }
         }
@@ -40,6 +39,29 @@ public class MapPoint extends TerrainPoint {
         return neighbours;
     }
 
+    public float getStaticField(int neighbourhoodDepth) {
+        if ( neighbourhoodDepth == 0 )
+            return getStaticField();
+        float sum = staticField;
+        ArrayList<MapPoint> toCheck = new ArrayList<>(neighbours);
+        ArrayList<MapPoint> nextLevel = new ArrayList<>(neighbours);
+        for (int depth = 1; depth < neighbourhoodDepth; depth++) {
+            ArrayList<MapPoint> toAdd = new ArrayList<>();
+            for (MapPoint point : nextLevel) {
+                if (!toCheck.containsAll(point.neighbours))
+                    toAdd.addAll(point.neighbours);
+            }
+            nextLevel.clear();
+            toCheck.addAll(toAdd);
+            nextLevel.addAll(toAdd);
+            toAdd.clear();
+        }
+        for (MapPoint point: toCheck) {
+            sum += point.getStaticField();
+        }
+        toCheck.clear();
+        return sum;
+    }
 
     public float getStaticField() {
         return staticField;

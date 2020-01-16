@@ -27,9 +27,9 @@ public class MapGrid extends JComponent {
         XCount = Integer.parseInt(localProperties.getProperty("XCount"));
         YCount = Integer.parseInt(localProperties.getProperty("YCount"));
         cellSize = Integer.parseInt(localProperties.getProperty("cellSize"));
-        totalDroneCount = Integer.parseInt(localProperties.getProperty("DroneCount0")) +
-                Integer.parseInt(localProperties.getProperty("DroneCount1")) +
-                Integer.parseInt(localProperties.getProperty("DroneCount2"));
+        totalDroneCount = Integer.parseInt(localProperties.getProperty("DroneCount1")) +
+                Integer.parseInt(localProperties.getProperty("DroneCount2")) +
+                Integer.parseInt(localProperties.getProperty("DroneCount3"));
         this.setPreferredSize(
                 new Dimension(
                         (XCount *cellSize)+(2*margin),
@@ -104,10 +104,8 @@ public class MapGrid extends JComponent {
         if (mapPoints != null) {
             for (int x = 0; x < XCount; x++) {
                 for (int y = 0; y < YCount; y++) {
-                    int finalX = x;
-                    int finalY = y;
-                    if (ready && Arrays.stream(drones).anyMatch(drones -> drones.getActualPosition().equals(mapPoints[finalX][finalY]))) {
-                        g.setColor(new Color(0xB641B2));
+                    if (ready && pointHasDrone(mapPoints[x][y])) {
+                        g.setColor(new Color(0xE6E600));
                     } else {
                         if (mapPoints[x][y].isScanned()) {
                             switch (mapPoints[x][y].getType()) {
@@ -129,8 +127,8 @@ public class MapGrid extends JComponent {
                         } else {
                             g.setColor(new Color(0x555555));
                         }
-                        g.fillRect(margin + (x * cellSize), margin + (y * cellSize), cellSize, cellSize);
                     }
+                    g.fillRect(margin + (x * cellSize), margin + (y * cellSize), cellSize, cellSize);
                 }
             }
         }
@@ -154,8 +152,22 @@ public class MapGrid extends JComponent {
         revalidate();
     }
 
+    void addDrone(int index, int type) {
+        drones[index] = new Drone(mapPoints, this, localProperties, type, terrainPoints);
+        drones[index].randomPlacement();
+    }
+
     void addDrone(int index, int type, int X, int Y) {
-        drones[index] = new Drone(mapPoints, localProperties, type, terrainPoints);
+        drones[index] = new Drone(mapPoints, this, localProperties, type, terrainPoints);
         drones[index].placeAt(X, Y);
     }
+
+    void setCellSize(int cellSize) {
+        this.cellSize = cellSize;
+    }
+
+    boolean pointHasDrone(MapPoint point) {
+        return Arrays.stream(drones).anyMatch(drones -> drones.getActualPosition().equals(point));
+    }
+
 }
