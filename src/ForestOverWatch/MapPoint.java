@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class MapPoint extends TerrainPoint {
     private transient ArrayList<MapPoint> neighbours;
-    private float staticField = 0;
+    private float staticField = 100000;
     private boolean scanned = false;
 
     MapPoint(Integer x, Integer y) {
@@ -32,6 +32,15 @@ public class MapPoint extends TerrainPoint {
         this.scanned = scanned;
     }
 
+    public MapPoint getNeighbourByIndexMap(Integer index) {
+        return neighbours.get(index);
+    }
+
+    public ArrayList<MapPoint> getNeighboursMap() {
+        return neighbours;
+    }
+
+
     public float getStaticField() {
         return staticField;
     }
@@ -41,4 +50,13 @@ public class MapPoint extends TerrainPoint {
     }
 
     boolean isScanned() {return scanned;}
+
+    void calculateField() {
+        setScanned(true);
+        for(int x = 0; x < getNeighboursMap().size(); x++) {
+            if (getStaticField() >= (getNeighbourByIndexMap(x).getStaticField())) {
+                setStaticField(getNeighbourByIndexMap(x).getStaticField()-1);
+            }
+        }
+    }
 }

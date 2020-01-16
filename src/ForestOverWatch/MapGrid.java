@@ -2,6 +2,7 @@ package ForestOverWatch;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -13,7 +14,7 @@ public class MapGrid extends JComponent {
     private int YCount;
     private MapPoint[][] mapPoints;
     private Logger logger;
-    private Drone drones[];
+    private Drone[] drones;
     private Properties localProperties;
     private TerrainPoint[][] terrainPoints;
 
@@ -38,6 +39,8 @@ public class MapGrid extends JComponent {
         drones[0].randomPlacement();
         drones[1].randomPlacement();
         drones[2].randomPlacement();
+        calcStaticField();
+        //printField();
     }
 
     void initialize() {
@@ -73,6 +76,36 @@ public class MapGrid extends JComponent {
             }
         }
     }
+
+    void calcStaticField(){
+        ArrayList<MapPoint> toCheck = new ArrayList<>();
+        for (Drone drone : drones) {
+            toCheck.addAll(drone.getActualPosition().getNeighboursMap());
+            drone.getActualPosition().setScanned(true);
+        }
+        while(!toCheck.isEmpty()){
+            if(!toCheck.get(0).isScanned()){
+                toCheck.get(0).calculateField();
+                for(int x = 0; x < toCheck.get(0).getNeighboursMap().size(); x++){
+                    if(!toCheck.get(0).getNeighbourByIndexMap(x).isScanned())
+                        toCheck.add(toCheck.get(0).getNeighbourByIndexMap(x));
+                }
+            }
+            toCheck.remove(toCheck.get(0));
+        }
+        for (int x = 0; x < XCount; x++)
+            for (int y = 0; y < YCount; y++)
+                mapPoints[x][y].setScanned(false);
+    }
+
+    /*void printField(){
+        for (int y = 0; y < YCount; y++){
+            for (int x = 0; x < XCount; x++){
+                System.out.printf("%f /", mapPoints[x][y].getStaticField());
+            }
+            System.out.printf("\n");
+        }
+    }*/
 
     @Override
     protected void paintComponent(Graphics g) {

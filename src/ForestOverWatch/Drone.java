@@ -1,5 +1,6 @@
 package ForestOverWatch;
 
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -28,6 +29,7 @@ public class Drone {
             case 2: velocity = 40; break;
             case 3: velocity = 10; break;
         }
+
     }
 
     void scan(){
@@ -75,8 +77,8 @@ public class Drone {
     }
 
     void move(){
-        float staticField_aux = 0.0f;
-        MapPoint aux = actualPosition;
+        float staticField_aux = actualPosition.getNeighbourByIndexMap(0).getStaticField();
+        MapPoint aux = actualPosition.getNeighbourByIndexMap(0);
         int x_aux = actualPosition.getXCoordinate();
         int y_aux = actualPosition.getYCoordinate();
 
