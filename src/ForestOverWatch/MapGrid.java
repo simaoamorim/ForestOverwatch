@@ -17,14 +17,19 @@ public class MapGrid extends JComponent {
     private Drone[] drones;
     private Properties localProperties;
     private TerrainPoint[][] terrainPoints;
+    private int totalDroneCount;
+    private boolean ready = false;
 
-    MapGrid(int XCount, int YCount, int cellSIze, Logger logger, Properties properties, TerrainPoint[][] terrainPoints) {
-        this.XCount = XCount;
-        this.YCount = YCount;
-        this.cellSize = cellSIze;
+    MapGrid(Logger logger, Properties properties, TerrainPoint[][] terrainPoints) {
         this.logger = logger;
         localProperties = properties;
         this.terrainPoints = terrainPoints;
+        XCount = Integer.parseInt(localProperties.getProperty("XCount"));
+        YCount = Integer.parseInt(localProperties.getProperty("YCount"));
+        cellSize = Integer.parseInt(localProperties.getProperty("cellSize"));
+        totalDroneCount = Integer.parseInt(localProperties.getProperty("DroneCount0")) +
+                Integer.parseInt(localProperties.getProperty("DroneCount1")) +
+                Integer.parseInt(localProperties.getProperty("DroneCount2"));
         this.setPreferredSize(
                 new Dimension(
                         (XCount *cellSize)+(2*margin),
@@ -32,15 +37,8 @@ public class MapGrid extends JComponent {
                 )
         );
         initialize();
-        drones = new Drone[3];
-        drones[0] = new Drone(mapPoints, localProperties, 1, terrainPoints);
-        drones[1] = new Drone(mapPoints, localProperties, 2, terrainPoints);
-        drones[2] = new Drone(mapPoints, localProperties, 3, terrainPoints);
-        drones[0].randomPlacement();
-        drones[1].randomPlacement();
-        drones[2].randomPlacement();
-        calcStaticField();
-        //printField();
+        new MapSettings(localProperties, this);
+//        calcStaticField();
     }
 
     void initialize() {
@@ -49,6 +47,7 @@ public class MapGrid extends JComponent {
             for (int y = 0; y < YCount; y++)
                 mapPoints[x][y] = new MapPoint(x,y);
         setNeighbourhood();
+        drones = new Drone[totalDroneCount];
     }
 
     private void setNeighbourhood() {
@@ -78,6 +77,7 @@ public class MapGrid extends JComponent {
     }
 
     void calcStaticField(){
+        ready = true;
         ArrayList<MapPoint> toCheck = new ArrayList<>();
         for (Drone drone : drones) {
             toCheck.addAll(drone.getActualPosition().getNeighboursMap());
@@ -98,15 +98,6 @@ public class MapGrid extends JComponent {
                 mapPoints[x][y].setScanned(false);
     }
 
-    /*void printField(){
-        for (int y = 0; y < YCount; y++){
-            for (int x = 0; x < XCount; x++){
-                System.out.printf("%f /", mapPoints[x][y].getStaticField());
-            }
-            System.out.printf("\n");
-        }
-    }*/
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -115,7 +106,7 @@ public class MapGrid extends JComponent {
                 for (int y = 0; y < YCount; y++) {
                     int finalX = x;
                     int finalY = y;
-                    if (Arrays.stream(drones).anyMatch(drones -> drones.getActualPosition().equals(mapPoints[finalX][finalY]))) {
+                    if (ready && Arrays.stream(drones).anyMatch(drones -> drones.getActualPosition().equals(mapPoints[finalX][finalY]))) {
                         g.setColor(new Color(0xB641B2));
                     } else {
                         if (mapPoints[x][y].isScanned()) {
@@ -153,7 +144,18 @@ public class MapGrid extends JComponent {
             drone.scan();
             drone.move();
         }
+        for(int x=0; x<XCount; x++) {
+            for (int y=0; y<YCount; y++) {
+                mapPoints[x][y].calcStaticField();
+            }
+
+        }
         repaint();
         revalidate();
+    }
+
+    void addDrone(int index, int type, int X, int Y) {
+        drones[index] = new Drone(mapPoints, localProperties, type, terrainPoints);
+        drones[index].placeAt(X, Y);
     }
 }

@@ -118,4 +118,8 @@ public class Drone {
             default: break;
         }
     }
+
+    void placeAt(int X, int Y) {
+        actualPosition = mapPoints[X][Y];
+    }
 }

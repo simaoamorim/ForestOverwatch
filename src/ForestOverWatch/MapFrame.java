@@ -10,12 +10,14 @@ import java.util.logging.Logger;
 public class MapFrame extends BaseGridFrame {
     private Integer XCount;
     private Integer YCount;
-    private Integer CellSize;
+    private Integer cellSize;
     private MapGrid mapGrid;
     private Properties localProperties;
     private Settings settingsWindow;
     private Logger logger;
     private TerrainPoint[][] terrainPoints;
+    private MapSettings mapSettings;
+    private Integer[] droneCount = new Integer[3];
 
 
     public MapFrame(Properties properties, Settings settings, Logger logger, TerrainPoint[][] terrainPoints) {
@@ -24,7 +26,10 @@ public class MapFrame extends BaseGridFrame {
         settingsWindow = settings;
         XCount = Integer.parseInt(localProperties.getProperty("XCount"));
         YCount = Integer.parseInt(localProperties.getProperty("YCount"));
-        CellSize = Integer.parseInt(localProperties.getProperty("cellSize"));
+        cellSize = Integer.parseInt(localProperties.getProperty("cellSize"));
+        droneCount[0] = Integer.parseInt(localProperties.getProperty("DroneCount0"));
+        droneCount[1] = Integer.parseInt(localProperties.getProperty("DroneCount1"));
+        droneCount[2] = Integer.parseInt(localProperties.getProperty("DroneCount2"));
         this.logger = logger;
         this.terrainPoints = terrainPoints;
         addWindowListener(new WindowAdapter() {
@@ -39,12 +44,9 @@ public class MapFrame extends BaseGridFrame {
         initUI();
     }
 
-    private void initUI() {
+    void initUI() {
         setLayout(new BorderLayout());
-        mapGrid = new MapGrid(Integer.parseInt(localProperties.getProperty("XCount")),
-                Integer.parseInt(localProperties.getProperty("YCount")),
-                Integer.parseInt(localProperties.getProperty("cellSize")),
-                logger, localProperties, terrainPoints);
+        mapGrid = new MapGrid(logger, localProperties, terrainPoints);
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel.add(mapGrid);
@@ -55,4 +57,6 @@ public class MapFrame extends BaseGridFrame {
     void timerHandler() {
         mapGrid.iteration();
     }
+
+
 }
