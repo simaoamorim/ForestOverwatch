@@ -230,11 +230,13 @@ public class Settings extends JFrame {private JComboBox<Integer> xCountChoice;
         randomizeTerrainButton.setEnabled(false);
         saveTerrain.setEnabled(false);
         loadTerrain.setEnabled(false);
+        iterationTimer.stop();
         mapFrame.dispose();
     }
 
     void mapFrameClosed() {
         terrainFrame.dispose();
+        terrainFrameClosed();
     }
 
     void timerHandler(ActionEvent e) {
